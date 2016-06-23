@@ -1,0 +1,15 @@
+---
+layout: post
+title: Perl assembly generator
+date: '2011-10-21T07:32:00.000-07:00'
+author: Daniel Hilst
+tags:
+- perl
+- assembly
+- stack
+modified_time: '2011-11-11T14:36:43.864-08:00'
+blogger_id: tag:blogger.com,1999:blog-8785437776394405849.post-6531133727353262247
+blogger_orig_url: http://gkos-hw.blogspot.com/2011/10/perl-assembly-generator.html
+---
+
+I wrote a little perl script that receives input and creates an x86 assembly program. This program put all data on stack and then print it using printf c function. Useless but cool  <br /><pre class="brush: Perl">#!/usr/bin/perl<br /><br />use warnings;<br />use strict;<br /><br />undef $/;<br />my $input = &lt;&gt;<br /><br />$input = unpack("H*", $input);<br />my @integers;<br /><br />while (length($input) &gt; 8) {<br /> my $str = substr($input, 0, 8);<br /> $str =~ s/(.{2})(.{2})(.{2})(.{2})/$4$3$2$1/;<br /> push(@integers, ("0x".$str));<br /> $input = substr($input, 8);<br />}<br /><br />my $buf = "";<br />while (length($input) &gt; 0) {<br /> $buf .= substr($input, -2);<br /> $input = substr($input, 0, -2);<br />}<br /><br />push(@integers, sprintf("0x%08x", hex($buf)));<br />my $stck_deep = ($#integers + 1) * 4;<br /><br />print &lt;&lt;EOS<br />        .section        .text.startup,"ax",\@progbits<br />        .globl  main<br />        .type   main, \@function<br />main:<br />        pushl   %ebp<br />        movl    %esp, %ebp<br /><br /> subl \$$stck_deep, %esp<br /><br /> movl \$$integers[0], (%esp)<br />EOS<br />;<br /><br />for my $i (1 .. $#integers) {<br /> printf("\tmovl \$%s, %d(%%esp)\n", $integers[$i], $i * 4); <br />} <br /><br />print &lt;&lt;EOS<br /> movl \$0x0, $stck_deep(%esp)<br /> <br /> pushl %esp<br /> call printf<br /> popl %eax<br /><br /> addl \$$stck_deep, %esp<br /><br /><br /> xorl %eax, %eax<br /> leave<br /> ret<br />EOS<br /><br />;<br /><br /></pre>Here is a try:<br /><a href="https://ideone.com/cuvXe">https://ideone.com/cuvXe</a><br /><a href="https://ideone.com/2oA9q">https://ideone.com/2oA9q</a><br />[]'s

@@ -1,0 +1,12 @@
+---
+layout: post
+title: catlike.c
+date: '2009-11-01T02:25:00.000-08:00'
+author: Daniel Hilst
+tags: 
+modified_time: '2009-11-17T08:53:00.734-08:00'
+blogger_id: tag:blogger.com,1999:blog-8785437776394405849.post-8432608219932700471
+blogger_orig_url: http://gkos-hw.blogspot.com/2009/11/sn-argvindx-iffp-fopenargvindx-r.html
+---
+
+usage: catlike.o file1 file2 ...<br /><pre class="brush: cpp">#include &lt;stdio.h&gt;<br /><br />int main(int *argc, char *argv[])<br />{<br />FILE *fp;<br />short indx;<br />char ch;<br /><br />for(indx=1; argv[indx] != 0; indx++)<br />{<br />printf("file -> %s\n", argv[indx]); <br />if(!(fp = fopen(argv[indx], "r")))<br />{<br />fprintf(stderr, "Error while trying "<br />"to read file: %s\n", argv[indx]);<br />return(1);<br />}<br />while((ch = getc(fp)) != EOF)<br />putchar(ch);<br />fclose(fp);<br />putchar('\n');<br />}<br />return(0);<br />}<br /></pre><br />OUTPUT:<br />file -> 1FILENAME<br />CONTENT OF FILE 1<br />file -> 2FILENAME<br />...

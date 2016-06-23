@@ -1,0 +1,12 @@
+---
+layout: post
+title: another hello world in gas, this time calling puts from libc
+date: '2010-10-10T20:18:00.000-07:00'
+author: Daniel Hilst
+tags: 
+modified_time: '2010-10-12T18:36:28.661-07:00'
+blogger_id: tag:blogger.com,1999:blog-8785437776394405849.post-309872946117492891
+blogger_orig_url: http://gkos-hw.blogspot.com/2010/10/another-hello-world-in-gas-this-time.html
+---
+
+<pre class="brush:as "># another hello world example<br /># you can compile this like:<br /># $ as -o hw.o mainhw.s <br /># $ gcc -o hw hw.o -lc<br /># $ ./hw<br />#<br />    .file "mainhw.s"<br />    .section .rodata <br />.Lstr:                       # the address of our string<br />    .asciz "Hello, World"<br /><br />    .text<br />    .type main, @function<br />    .globl main<br />main:<br />    pushl %ebp              # prologue of every function<br />    movl %esp, %ebp         # still prologue.. <br />    pushl $.Lstr            # pass arguments on stack<br />    call puts               # puts(.Lstr)<br />    movl $0, %eax           # the 0 of return 0<br />    leave                   # epilogue of every function<br />    ret                     # return <br />    .size main, . - main    <br /></pre>

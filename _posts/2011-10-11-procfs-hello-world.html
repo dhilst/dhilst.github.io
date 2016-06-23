@@ -1,0 +1,16 @@
+---
+layout: post
+title: Procfs hello world
+date: '2011-10-11T20:06:00.000-07:00'
+author: Daniel Hilst
+tags:
+- procfs
+- "/proc"
+- c
+modified_time: '2011-11-11T14:37:36.281-08:00'
+thumbnail: http://2.bp.blogspot.com/-2XpD9ntG_Yk/TpUDga3NLfI/AAAAAAAAAKk/uEZVwZxNCW4/s72-c/2011-10-12-000408_813x147_scrot.png
+blogger_id: tag:blogger.com,1999:blog-8785437776394405849.post-342613957950274641
+blogger_orig_url: http://gkos-hw.blogspot.com/2011/10/procfs-hello-world.html
+---
+
+Fuck you world... I will learn kernel, getting payed or not!!<br /><br /><br />Here is a simple procfs hello world<br /><br /><br />The source (proc2.c)<br /><pre class="brush: c">#include &lt;linux/module.h&gt;<br />#include &lt;linux/kernel.h&gt;<br />#include &lt;linux/proc_fs.h&gt;<br /><br />static struct proc_dir_entry *proc_file;<br /><br />int procfile_read(char *buf, char **buf_location, off_t offset,<br /> int buf_len, int *eof, void *data)<br />{<br /> return sprintf(buf, "Hello Word\n"); <br />}<br /><br />#define PROC_FILE_NAME "hello"<br />int init_module()<br />{<br /> proc_file = create_proc_entry(PROC_FILE_NAME, 0644, NULL);<br /> if (!proc_file) { <br />  remove_proc_entry(PROC_FILE_NAME, NULL);<br />  return -ENOMEM;<br /> } <br /> proc_file-&gt;read_proc = procfile_read;<br /> proc_file-&gt;mode = 0644;<br /> proc_file-&gt;uid = 0;<br /> proc_file-&gt;gid = 0;<br /> proc_file-&gt;size = 37;<br /> return 0;<br />}<br /><br /><br />void cleanup_module()<br />{<br /> remove_proc_entry(PROC_FILE_NAME, NULL);<br />}<br /></pre><br />The Makefile<br /><pre class="brush: bash">obj-m += proc2.o<br /><br />all:<br /> make -C /lib/modules/$(shell uname -r)/build M=$(PWD) modules<br /></pre><br />Compiling and running<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://2.bp.blogspot.com/-2XpD9ntG_Yk/TpUDga3NLfI/AAAAAAAAAKk/uEZVwZxNCW4/s1600/2011-10-12-000408_813x147_scrot.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://2.bp.blogspot.com/-2XpD9ntG_Yk/TpUDga3NLfI/AAAAAAAAAKk/uEZVwZxNCW4/s1600/2011-10-12-000408_813x147_scrot.png" /></a></div><br /><br />Cheers :-P

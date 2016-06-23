@@ -1,0 +1,12 @@
+---
+layout: post
+title: Perl script to generate basic prototypes..
+date: '2010-11-20T06:39:00.000-08:00'
+author: Daniel Hilst
+tags: 
+modified_time: '2010-11-20T06:45:55.129-08:00'
+blogger_id: tag:blogger.com,1999:blog-8785437776394405849.post-7874906621217018786
+blogger_orig_url: http://gkos-hw.blogspot.com/2010/11/perl-script-to-generate-basic.html
+---
+
+Typedefs are not supported and you need to code your<br />functions with follow patter:<br /><b>type</b><br /><b>function_indetifier (list_of_parameters)</b><br /><b>{ ... </b><i>hereafter makes no difference</i><br /><br />usage: <i>cat souce.c | perl prot.pl &gt; prots.txt</i><br />then copy and paste where you want...<br /><i> </i><br /><i><br /></i><br /><br /><pre class="brush: perl"># Create the prototypes for all functions<br /># on a given C source file<br />use strict;<br />use warnings;<br /><br />my @ctypes = qw(<br />    unsigned <br />    signed <br />    long <br />    short <br />    int <br />    float <br />    double <br />    struct <br />    char<br />    static<br />    const<br />);<br /><br />my @contents = &lt;&gt;;<br /><br />for my $line (0 .. $#contents) {<br />    my $lref = \$contents[$line];<br />    my $prot = '';<br />    for (@ctypes) {<br />        if ($$lref =~ /^$_/) {    <br />            my $func = $contents[++$line];<br />            $func =~ s/\w*,/,/g;<br />            $func =~ s/\w*\)/)/g;<br />            $prot = "$$lref $func;";<br />            $prot =~ s/\n//g;<br />            print "$prot\n";<br />            next;<br />        }<br />    }<br />}<br />           <br /></pre>test: <a href="http://ideone.com/5tE0F">http://ideone.com/5tE0F</a><br />note: I will coment that hash implementation soon..

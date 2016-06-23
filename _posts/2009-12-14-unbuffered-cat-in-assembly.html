@@ -1,0 +1,12 @@
+---
+layout: post
+title: cat in assembly
+date: '2009-12-14T06:00:00.000-08:00'
+author: Daniel Hilst
+tags: 
+modified_time: '2009-12-14T18:05:39.796-08:00'
+blogger_id: tag:blogger.com,1999:blog-8785437776394405849.post-428000567753349464
+blogger_orig_url: http://gkos-hw.blogspot.com/2009/12/unbuffered-cat-in-assembly.html
+---
+
+<pre class="nerd">section .bss<br />char resb 1 ; unbeffered<br /><br /><br />section .text<br /> global _start:<br /><br />_start:<br /><br /> mov  ecx, char<br /><br />while:<br /> call  read<br /> cmp eax, 0<br /> jle end_while<br /> <br /> call write<br /> jmp  while<br /><br />end_while:<br /> mov  ebx, eax<br /> mov  eax, 1<br /> int  0x80  <br /> <br />read:<br /> mov  eax, 3<br /> mov  ebx, 0<br /> mov  ecx, char<br /> mov  edx, 1<br /> int  0x80<br /> <br /> ret<br /><br />write:<br /> mov  ebx, eax<br /> mov  eax, 1<br /> mov  ecx, char<br /> mov edx, 1<br /> int  0x80<br /> <br /> ret <br /></pre><br />this is almost equa of "minicat.c", it <br />can return 0 (end of file) or -1 (error)<br />usage: catasm < file

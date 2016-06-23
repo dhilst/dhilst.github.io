@@ -1,0 +1,14 @@
+---
+layout: post
+title: Prototype maker 2.0
+date: '2010-11-22T16:59:00.000-08:00'
+author: Daniel Hilst
+tags:
+- perl
+- prototype maker
+modified_time: '2011-11-11T14:39:56.318-08:00'
+blogger_id: tag:blogger.com,1999:blog-8785437776394405849.post-4673586954328470225
+blogger_orig_url: http://gkos-hw.blogspot.com/2010/11/prototype-maker-20.html
+---
+
+There is no patter alignment anymore .. !<br /><br /><pre class="brush: perl"># Create the prototypes for all functions<br /># on a given C source file<br />use strict;<br />use warnings;<br /><br />my @ctypes = qw(<br />    void<br />    unsigned <br />    signed <br />    long <br />    short <br />    int <br />    float <br />    double <br />    struct <br />    char<br />    static<br />    const<br />);<br /><br />my @contents = &lt;&gt;;<br /><br />for my $line (0 .. $#contents) {<br />    my $lref = \$contents[$line];<br />    my $prot = '';<br />    for my $type (@ctypes) {<br />        if ($$lref =~ /^$type/) {<br />             while ($contents[$line] !~ /\{/) { # seek for {<br />                $prot .= "$contents[$line++] ";<br />            }<br />            chop $prot;            # the last space<br />            $prot =~ s/\n//go;     # remove LFs <br />            $prot =~ s/\w*,/, /go; # remove argument intentifiers<br />            $prot =~ s/\w*\)/)/go; # remove the last argument <br />            $prot .= ';';           # append a semicolon <br />            print $prot, "\n";<br />            next;<br />        }<br />    }<br />}<br /><br /></pre>

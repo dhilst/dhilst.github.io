@@ -1,0 +1,18 @@
+---
+layout: post
+title: Capture idle "percentage" in C
+date: '2012-02-15T12:30:00.000-08:00'
+author: Daniel Hilst
+tags:
+- "/proc/stat"
+- idle
+- "/proc"
+- c
+- idle percenteage
+- idle percentage C
+modified_time: '2012-02-15T12:30:32.642-08:00'
+blogger_id: tag:blogger.com,1999:blog-8785437776394405849.post-2747296405087733617
+blogger_orig_url: http://gkos-hw.blogspot.com/2012/02/capturen-idle-percentage-in-c.html
+---
+
+This program will read /proc/stat an calculum the amount of time that computer was idle...<br /><br /><br /><pre class="brush: c"><br />#include &lt;stdio.h&gt;<br />#include &lt;string.h&gt;<br />#include &lt;stdlib.h&gt;<br />#include &lt;unistd.h&gt;<br /><br />#define BUFLEN 256<br />static char buf[BUFLEN];<br /><br /><br />int strsplit (char *string, char **fields, size_t size);<br /><br />int main(void)<br />{<br />        FILE *stat;<br />        char *fields[9];        <br />        int numfields;<br /><br />        unsigned int ncores;<br /><br />        unsigned int idle;<br />        unsigned int old_idle = 0;<br /><br />        <br />        while (1) {<br />                /*<br />                 * The cpu sum line SHOULD be the first line<br />                 * on /proc/stat, or things will get wrong.<br />                 */<br />                if ((stat = fopen("/proc/stat", "r")) == NULL) {<br />                        perror("fopen");<br />                        exit(EXIT_FAILURE);<br />                }<br /><br />                fgets(buf, BUFLEN, stat);<br /><br />                numfields = strsplit (buf, fields, 9);<br />                if (numfields &lt; 5) {<br />                        fprintf(stderr, "To few fields\n");<br />                        exit(EXIT_FAILURE);<br />                }<br />                <br />                ncores = sysconf(_SC_NPROCESSORS_ONLN); /* number of cores */<br />                idle = atoi(fields[4]);<br />                printf("idle %d%%\n", (idle - old_idle) / ncores);<br />                old_idle = idle;<br />                <br />                fclose(stat);<br />                sleep(1);<br />        }                        <br /><br />        return 0;<br />}<br /><br />int strsplit (char *string, char **fields, size_t size)<br />{<br />        size_t i;<br />        char *ptr;<br />        char *saveptr;<br /><br />        i = 0;<br />        ptr = string;<br />        saveptr = NULL;<br />        while ((fields[i] = strtok_r (ptr, " \t\r\n", &saveptr)) != NULL)<br />        {<br />                ptr = NULL;<br />                i++;<br /><br />                if (i &gt;= size)<br />                        break;<br />        }<br /><br />        return ((int) i);<br />}<br /><br /></pre>

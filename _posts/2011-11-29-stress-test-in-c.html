@@ -1,0 +1,12 @@
+---
+layout: post
+title: Stress test in C !?
+date: '2011-11-29T20:05:00.000-08:00'
+author: Daniel Hilst
+tags: 
+modified_time: '2012-01-05T17:24:12.147-08:00'
+blogger_id: tag:blogger.com,1999:blog-8785437776394405849.post-7140869232904764211
+blogger_orig_url: http://gkos-hw.blogspot.com/2011/11/stress-test-in-c.html
+---
+
+This code will create N threads that take B bytes of memory each and spin forever. Call it whihout arguments to see the usage.<br /><br /><pre class="brush:c">#include &lt;stdio.h&gt;<br />#include &lt;stdlib.h&gt;<br />#include &lt;pthread.h&gt;<br /><br />#define pexit(s) ({perror(s); exit(EXIT_FAILURE);})<br /><br />static unsigned int sleepi = 0;<br />void *xmalloc(size_t);<br />void *tfunction(void *);<br /><br />int main(int argc, char **argv)<br />{<br />        int nthreads;<br />        int nbytes;<br />        int i;<br />        pthread_t *threadv;<br /><br />        if (argc &lt;= 2) {<br />                printf("Usage: %s NUMBER_OF_THREADS NUMBER_OF_BYTES_PER_THREAD "<br />                                "[SLEEP_INTERVAL_IN_SECS]\n", argv[0]);<br />                exit(EXIT_FAILURE);<br />        }<br /><br />        nthreads        = atoi(argv[1]);<br />        nbytes          = atoi(argv[2]);<br />        if (argc &gt; 3) {<br />                sleepi          = atoi(argv[3]);<br />        }<br /><br />        threadv = xmalloc(sizeof(pthread_t) * nthreads);<br />        for (i = 0; i &lt; nthreads; i++) {<br />               pthread_create(&amp;threadv[i], NULL, tfunction, (void *)&amp;nbytes);<br />        }<br />        while (1) sleep(~0lu); /* MAX LONG POSSIBLE */<br />        return 0;<br />}<br /><br />void *xmalloc(size_t siz)<br />{<br />        void *n = malloc(siz);<br />        if (!n)<br />                pexit("malloc"); <br />        return n;<br />}<br /><br />void *tfunction(void *num)<br />{<br />        int i = *(int *)num;<br />        while (i--) malloc(1);<br />        if (sleepi)<br />                while (1) sleep(sleepi);<br />        else<br />                while (1);<br />}<br /><br /></pre>

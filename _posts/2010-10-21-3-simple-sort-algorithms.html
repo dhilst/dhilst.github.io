@@ -1,0 +1,12 @@
+---
+layout: post
+title: The 3 simple sort algorithms
+date: '2010-10-21T20:05:00.000-07:00'
+author: Daniel Hilst
+tags: 
+modified_time: '2010-10-21T20:11:11.314-07:00'
+blogger_id: tag:blogger.com,1999:blog-8785437776394405849.post-6350690088432835308
+blogger_orig_url: http://gkos-hw.blogspot.com/2010/10/3-simple-sort-algorithms.html
+---
+
+<pre class="brush: c">/*    Bubble Sort    */<br />void<br />bsort (int ar[], int len)<br />{<br />    int control = 1, i, tmp;<br />    while (control--) {<br />        for (i = 0; i < len - 1; i++) <br />            if (ar[i] > ar[i + 1]) {<br />                tmp = ar[i], ar[i] = ar[i + 1], ar[i + 1] = tmp;<br />                control = 1;<br />            }<br />    }<br />}<br /><br />/*    Inserction Sort    */<br />void<br />isort (int ar[], int len)<br />{<br />    int i, j, tmp;<br />    for (i = 1; i < len; i++, ar[j + 1] = tmp) <br />        for (j = i -1, tmp = ar[i]; j >= 0 && ar[j] > tmp; j--)<br />            ar[j + 1] = ar[j];<br />}<br /><br />/*    Selection Sort    */<br />void<br />ssort (int ar[], int len)<br />{<br />    int i, j, lesser, tmp, at;<br />    for (i = 0; i < len - 1; <br />         tmp = ar[i], ar[i] = lesser, ar[at] = tmp, i++)<br />        for (j = i + 1, lesser = ar[i], at = i; j < len; j++) <br />            if (lesser > ar[j]) <br />                lesser = ar[j], at = j;<br />}<br /></pre>tested at <a href="http://codepad.org/3Co4Qipn">http://codepad.org/3Co4Qipn</a>

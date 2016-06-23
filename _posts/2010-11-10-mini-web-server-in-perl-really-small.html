@@ -1,0 +1,12 @@
+---
+layout: post
+title: Mini web server in perl (really small han?)
+date: '2010-11-10T13:11:00.000-08:00'
+author: Daniel Hilst
+tags: 
+modified_time: '2010-11-10T13:14:25.443-08:00'
+blogger_id: tag:blogger.com,1999:blog-8785437776394405849.post-3150792616709345793
+blogger_orig_url: http://gkos-hw.blogspot.com/2010/11/mini-web-server-in-perl-really-small.html
+---
+
+<pre class="brush: perl">use strict;<br />use warnings;<br />use LWP;<br />use HTTP::Daemon;<br /><br /># the parameters are <br /># the user/group user to restrict permissions, the port (default 80)<br /># the local addres (default locahost)<br /># respectivaly<br />my ($userg, $port, $laddres) = @ARGV;<br />$userg or die 'You need to suply a nonroot user/group as first parameter'; <br />my ($user, $group) = split ('/', $userg);<br /><br />$port = 80 unless $port;<br />$laddres = 'localhost' unless $laddres;<br /><br />my $server = new HTTP::Daemon (<br />    LocalAddr =&gt; $laddres,<br />    LocalPort =&gt; $port,<br />    Listen =&gt; 5,<br />    Reuse =&gt; 1,<br />) || die $!;<br /><br />$&gt; = getpwnam $user || die $!; <br />$) = getgrnam $group || die $!; <br /><br /><br />while (my $con = $server-&gt;accept()) {<br />    my $pid = fork();<br />    if (!$pid) { <br />        my $req = $con-&gt;get_request();<br />        print $req-&gt;as_string();<br />        my $file = $req-&gt;url();<br />        $file =~ s/^.//g;    <br />        $con-&gt;send_file_response($file);<br />    } elsif ($pid) { next;  <br />    } else { print STDERR "fork: $!\n" };<br />}<br /><br /><br /></pre>

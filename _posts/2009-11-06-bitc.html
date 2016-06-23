@@ -1,0 +1,12 @@
+---
+layout: post
+title: bitc.c
+date: '2009-11-06T17:17:00.000-08:00'
+author: Daniel Hilst
+tags: 
+modified_time: '2009-11-17T08:51:05.563-08:00'
+blogger_id: tag:blogger.com,1999:blog-8785437776394405849.post-5342354471244111478
+blogger_orig_url: http://gkos-hw.blogspot.com/2009/11/bitc.html
+---
+
+<pre class="brush: cpp">&nbsp;#include &lt;stdio.h&gt;<br /><br />void PrintBit(int integer)<br />{<br />&nbsp;&nbsp;&nbsp; (integer &amp; 128)?putchar('1'):putchar('0');<br />&nbsp;&nbsp;&nbsp; (integer &amp; 64)?putchar('1'):putchar('0');<br />&nbsp;&nbsp;&nbsp; (integer &amp; 32)?putchar('1'):putchar('0');<br />&nbsp;&nbsp;&nbsp; (integer &amp; 16)?putchar('1'):putchar('0');<br />&nbsp;&nbsp;&nbsp; (integer &amp; 8)?putchar('1'):putchar('0');<br />&nbsp;&nbsp;&nbsp; (integer &amp; 4)?putchar('1'):putchar('0');<br />&nbsp;&nbsp;&nbsp; (integer &amp; 2)?putchar('1'):putchar('0');<br />&nbsp;&nbsp;&nbsp; (integer &amp; 1)?putchar('1'):putchar('0');<br />}<br /><br />int main(int argc, char **argv)<br />{<br />&nbsp;&nbsp;&nbsp; unsigned uns;<br />&nbsp;&nbsp;&nbsp; argv++;<br />&nbsp;&nbsp;&nbsp; for(; argc &gt; 1; argc--, argv++)<br />&nbsp;&nbsp;&nbsp; {<br />&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; uns = atoi(*argv);<br />&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; printf("%3d: ", uns);<br />&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; PrintBit(uns);<br />&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; putchar('\n');<br />&nbsp;&nbsp;&nbsp; }<br />&nbsp;&nbsp;&nbsp; return(0);<br /><br />}<br /></pre><br />This program take numbers as parameters.. convert from char to unsinedsthen print in binary form.. I make this to smooth the study of bitwises operators<br />it's useful in this form:<br />./bitc.o 21 11 $((21&amp;11))<br />OUTPUT:<br />21: 00010101<br />11: 00001011<br />&nbsp;&nbsp;&nbsp;1: 00000001

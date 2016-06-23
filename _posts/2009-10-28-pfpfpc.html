@@ -1,0 +1,12 @@
+---
+layout: post
+title: 
+date: '2009-10-28T20:53:00.000-07:00'
+author: Daniel Hilst
+tags: 
+modified_time: '2009-11-17T08:19:31.063-08:00'
+blogger_id: tag:blogger.com,1999:blog-8785437776394405849.post-664352624620332000
+blogger_orig_url: http://gkos-hw.blogspot.com/2009/10/pfpfpc.html
+---
+
+pf_pf_pc.c<br /><pre class="brush: cpp">#include &lt;stdio.h&gt;<br /><br />char *ret_str(void){<br />return("Hello World");<br />}<br /><br />char *(*(func)(void))(void){<br />char *(*pf)(void);<br />pf = ret_str;<br />return(pf);<br />}<br /><br />int main(){<br />char *(*pff)(void);<br />pff = func();<br />printf("%s", pff());<br />return(0);<br />}<br /></pre><br />OUTPUT<br />Hello World

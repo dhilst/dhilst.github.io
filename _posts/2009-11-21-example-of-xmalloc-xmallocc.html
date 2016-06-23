@@ -1,0 +1,12 @@
+---
+layout: post
+title: Example of xmalloc ~ xmalloc.c
+date: '2009-11-21T20:07:00.000-08:00'
+author: Daniel Hilst
+tags: 
+modified_time: '2009-11-21T20:07:12.878-08:00'
+blogger_id: tag:blogger.com,1999:blog-8785437776394405849.post-4465357014401452216
+blogger_orig_url: http://gkos-hw.blogspot.com/2009/11/example-of-xmalloc-xmallocc.html
+---
+
+<pre class="brush: cpp">#include &lt;stdio.h&gt;<br />#include &lt;stdlib.h&gt;<br /><br />void *<br />xmalloc (size_t size)<br />{<br /> void *malloc();<br /> register void *value = malloc (size);<br /> if(value == 0)<br />  error("Virtual memory exhausted");<br /> return (value);<br />}<br /><br /><br />char *<br />savestring (const char *ptr, size_t len)<br />{<br /> register char *value = (char *) xmalloc (len + 1);<br /> value[len] = '\0';<br /> return (char *) memcpy (value, ptr, len);<br />}<br /><br /><br />int<br />main (void)<br />{<br /> char *str;<br /> <br /> str = savestring ("Hello World", 12);<br /> printf("%s\n", str); <br /> return(0);<br />}<br /></pre>xmalloc check if malloc successfully allocate the memory that you need

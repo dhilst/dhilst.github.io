@@ -1,0 +1,12 @@
+---
+layout: post
+title: Selection Sort in PASCAL
+date: '2010-09-16T06:48:00.001-07:00'
+author: Daniel Hilst
+tags: 
+modified_time: '2010-09-16T06:49:12.847-07:00'
+blogger_id: tag:blogger.com,1999:blog-8785437776394405849.post-2959063712070867599
+blogger_orig_url: http://gkos-hw.blogspot.com/2010/09/selection-sort-in-pascal.html
+---
+
+<pre class="brush: pascal">PROGRAM Selection_Sort;<br /><br />CONST len = 12;<br /><br />TYPE intarray = ARRAY[1..len] OF INTEGER;<br /> <br />FUNCTION ssort (A: intarray): intarray;<br />VAR<br /> at, i, j, smaller, tmp: integer;<br /> newarray: intarray;<br />BEGIN<br />  { copy array }<br />  FOR i:=1 TO len DO<br />   newarray[i] := A[i];<br /><br />  { sort }<br />  FOR i:=1 TO len-1 DO<br />  BEGIN<br />   smaller := newarray[i];<br />   at   := i;<br />   FOR j:=i+1 TO len DO<br />   BEGIN<br />    IF newarray[j] < smaller THEN<br />    BEGIN<br />     smaller := newarray[j];<br />     at  := j;<br />    END<br />   END; { FOR j:=i+1 }<br /><br />   IF newarray[i] > smaller THEN<br />   BEGIN { swap } <br />    tmp := newarray[i];<br />    newarray[i] := smaller;<br />    newarray[at] := tmp;<br />   END<br />  END; { FOR i:= 0 }<br />  ssort := newarray;<br />END;<br /><br />{ MAIN }<br />VAR<br /> a1, a2: intarray;<br /> buf, i: integer;<br /><br />BEGIN<br /> { read array }<br /> FOR i:=1 TO len DO<br /> BEGIN<br />  writeln ('Enter a number');<br />  readln (buf);<br />  a1[i] := buf; <br /> END;<br /><br /> { print a1 }<br /> FOR i:=1 TO len DO<br /> BEGIN<br />  write(a1[i], ' ');<br /> END;<br /> writeln;<br /><br /> { sort }<br /> a2 := ssort (a1);<br /><br /> { print sorted a2}<br /> FOR i:=1 TO len DO<br /> BEGIN<br />  write(a2[i], ' ');<br /> END;<br /> writeln;<br />END.<br /></pre>

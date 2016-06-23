@@ -1,0 +1,12 @@
+---
+layout: post
+title: Testing Linked List against multiple data types
+date: '2010-10-28T13:00:00.000-07:00'
+author: Daniel Hilst
+tags: 
+modified_time: '2010-10-28T13:00:42.696-07:00'
+blogger_id: tag:blogger.com,1999:blog-8785437776394405849.post-2319187217373361608
+blogger_orig_url: http://gkos-hw.blogspot.com/2010/10/testing-linked-list-against-multiple.html
+---
+
+<pre class="brush: c">#include &lt;stdio.h&gt;<br />#include &lt;stdlib.h&gt;<br />#include &lt;string.h&gt;<br />struct instance {<br />    int a, b;<br />    float f;<br />    char str[8];<br />    int (*p) (const char *);<br />};<br /><br />int<br />main (void)<br />{<br />    llist mylist;<br />    node *bufnode;<br />    struct search_result sr;<br />    int i = -1;<br />    char string[] = "Hello World";<br />    float myf = 2.5;<br />    struct instance strc = {1, 2, 3.4, "Five", puts};<br />    struct instance otherstrc;<br /><br />    init_llist (&mylist);<br /><br />    bufnode = init_node ("struct", (char *)&strc, sizeof (struct instance));<br />    add_node (&mylist, bufnode);<br /><br />    bufnode = init_node ("int", (char *)&i, sizeof (int));<br />    add_node (&mylist, bufnode);<br /><br />    bufnode = init_node ("string", string, strlen ("Hello World") + 1); <br />    add_node (&mylist, bufnode);<br /><br />    bufnode = init_node ("float", (char *)&myf, sizeof (float));<br />    add_node (&mylist, bufnode);<br /><br />    sr = search_node (&mylist, "struct");<br />    memcpy (&otherstrc, sr.n-&gt;data, sizeof (struct instance));<br />    printf ("otherstrc: %d %d %f %s\n", <br />        otherstrc.a, otherstrc.b, otherstrc.f , otherstrc.str);<br />    otherstrc.p("Nice?");<br />    del_node (&mylist, sr.n, sr.prior);<br /><br />    sr = search_node (&mylist, "int");<br />    printf ("%d\n", *(int *)sr.n-&gt;data);<br />    del_node (&mylist, sr.n, sr.prior);<br /><br />    sr = search_node (&mylist, "float");<br />    printf ("%f\n", *(float *)sr.n-&gt;data);<br />    del_node (&mylist, sr.n, sr.prior);<br /><br />    sr = search_node (&mylist, "string");<br />    printf ("%s\n", sr.n-&gt;data);<br />    del_node (&mylist, sr.n, sr.prior);<br /><br />    if (! mylist.first)<br />        printf ("empty\n");<br />    return 0;<br />}<br /><br /></pre><br />Tested here: <a href="http://ideone.com/lTlp9">http://ideone.com/lTlp9</a>

@@ -1,0 +1,12 @@
+---
+layout: post
+title: geekest hello world assembly
+date: '2009-12-09T23:01:00.000-08:00'
+author: Daniel Hilst
+tags: 
+modified_time: '2009-12-10T10:32:53.197-08:00'
+blogger_id: tag:blogger.com,1999:blog-8785437776394405849.post-262728034109487505
+blogger_orig_url: http://gkos-hw.blogspot.com/2009/12/geekest-hello-world.html
+---
+
+<pre class="nerd">; file geekest-hello-world.asm<br />section .text<br /> global _start<br />_start:<br /> push  ebx<br /> mov  ebp, esp<br /> sub  esp, 12<br /> <br /><br /> mov  dword [ebp - 12], 0x6c6c6548  ; lleH <br /> mov  dword [ebp - 8],  0x6f57206f  ; oW o<br /> mov  dword [ebp - 4],  0x0a646c72  ; \ndlr<br /> <br /> mov  eax, 4   ; sys_write<br /> mov  ebx, 1   ; stdout<br /> lea  ecx, [ebp - 12] ; from here<br /> mov  edx, 12   ; read 12 bytes<br /> int  0x80   ; DO IT! <br /><br /> pop  ebx<br /><br /> mov  eax, 1<br /> mov  ebx, 0<br /> int  0x80<br /></pre>Compiling<br />nasm -f elf geekest-hello-world.asm<br />ld -s -o geekest geekest-hello-world.o<br /><br />THIS IS F*CKING AWESOME!

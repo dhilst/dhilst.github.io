@@ -1,0 +1,13 @@
+---
+layout: post
+title: 'It''s funny how the things works when you know why they works ! (: Or have
+  a little idea'
+date: '2009-12-09T12:59:00.000-08:00'
+author: Daniel Hilst
+tags: 
+modified_time: '2009-12-09T13:07:13.108-08:00'
+blogger_id: tag:blogger.com,1999:blog-8785437776394405849.post-7408086469752466837
+blogger_orig_url: http://gkos-hw.blogspot.com/2009/12/its-funny-how-things-works-when-you.html
+---
+
+retaddr.asm<br /><pre class="nerd">segment .text<br /> global retaddr<br />retaddr:<br /> enter 0,0<br /> lea  eax, [ebp + 8]<br /><br /> leave<br /> ret<br /></pre><br />fakeint.c<br /><pre class="brush: cpp">#include &lt;stdio.h&gt;<br /><br />int *retaddr (int);<br /><br />int <br />main (void)<br />{<br /> printf ("%s\n", * retaddr ("Hello World")); <br /> return 0;<br />}<br /></pre><br />Compiling:<br />nasm -f elf retaddr.asm<br />gcc -o fake fake.c retaddr.o<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This will raise some warnings ... but <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; at least here works (:

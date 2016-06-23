@@ -1,0 +1,12 @@
+---
+layout: post
+title: list.c
+date: '2009-10-28T20:50:00.000-07:00'
+author: Daniel Hilst
+tags: 
+modified_time: '2009-12-10T14:19:46.881-08:00'
+blogger_id: tag:blogger.com,1999:blog-8785437776394405849.post-4439535557445879098
+blogger_orig_url: http://gkos-hw.blogspot.com/2009/10/list.html
+---
+
+<pre class="brush: cpp">#include &lt;stdio.h&gt;<br /><br />struct alf<br />{ <br /> char lt;<br /> struct alf *next;<br />}ar[27];<br /><br /><br />int main()<br />{<br /> struct alf *list_p;<br /> char ch, *str, *ar_p[12];<br /> short indx;<br /> ch = 97;<br /> str = "hello world";<br /><br /> for(indx = 0; indx <= 25; indx++, ch++)<br /> {<br />  ar[indx].lt = ch;<br />  ar[indx].next = &ar[indx+1];<br /> }<br /> ar[26].lt = ' ';<br /> ar[26].next = (void *)0;<br /><br /><br /> for(indx = 0; *str != 0; str++)<br /> {<br />  list_p = ar; /* back 'a' */<br />  while(list_p)<br />  {<br />   if(list_p->lt == *str)<br />   ar_p[indx++] = &list_p->lt;<br />   list_p = list_p->next;<br />  }<br /> }<br /> *ar_p[11] = '\0'; <br /><br /> for(indx = 0; *ar_p[indx] != '\0'; indx++)<br />  printf("%c", *ar_p[indx]);<br /> putchar('\n'); <br /><br /> return(0);<br />}<br /></pre><br />OUTPUT:<br />hello world<br /><br />I'm updating this becase I realy like it.. (dec 10)<br />struct alf is a linked list with alphabet letters, and one space <br />(becouse hello world have a space :P) <br /><br />So.. I got an array that have pointers pointing to the right members <br />of the list.. I don't copy the chars... I print it from where they are

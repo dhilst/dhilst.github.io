@@ -1,0 +1,12 @@
+---
+layout: post
+title: Finally I got, my own get_opts function =D
+date: '2009-11-30T12:37:00.000-08:00'
+author: Daniel Hilst
+tags: 
+modified_time: '2009-12-06T17:07:51.908-08:00'
+blogger_id: tag:blogger.com,1999:blog-8785437776394405849.post-7286285954459512571
+blogger_orig_url: http://gkos-hw.blogspot.com/2009/11/finally-i-got-my-own-getopts-function-d.html
+---
+
+I spent some good hours trying to get this working...<br />After a hundreds of attemps I decide to make a real<br />algorithm.. and then .. after a little setting in the logic <br />I got really working as I expect..<br /><br />Here is <br /><pre class="brush: cpp">#include &lt;stdio.h&gt;<br /><br />static int   Optindx = 1;<br />static char *Optarg  = NULL;<br /><br />short int<br />chstr (char ch, char *str)<br />{<br /> for (; *str; str++)<br />  if (ch == *str)<br />   return 0;<br /> return -1;<br />}<br /><br />char *<br />search_arg(char **argv)<br />{<br /> char *ptr;<br /> if (argv[Optindx+1] == NULL)<br />  return 0;<br /> while (*(ptr = argv[++Optindx]) != '-')<br />  if (argv[Optindx] = NULL)<br />   return 0;<br /> <br /> return ptr;<br />}<br /><br />int<br />get_opts(char **argv, char *legal)<br />{<br /> int letter = 0;<br /><br /> if (Optarg == NULL)<br />  if (*(Optarg = argv[Optindx]) != '-')<br />   if ((Optarg = search_arg (argv)) == 0)<br />    return -1;<br />  <br /> if (*Optarg == '\0')<br />  if ((Optarg = search_arg (argv)) == 0)<br />   return -1;<br /><br /> if (*(Optarg+1) == '-') {<br />  return -1;<br /> Optarg++;<br /> return 0;<br /> }<br /><br /><br /> if (chstr (*Optarg, legal) == 0)<br />  return letter = *Optarg++;<br /> else <br />  return '?';<br />}<br /><br />/* to Test */<br />int<br />main (int argc, char *argv[])<br />{<br /> int ch;<br /><br /><br /> if (argc < 2)<br />  return -1;<br /><br /> while ((ch = get_opts(argv, "abc")) != -1) {<br />  switch (ch) {<br />   case 'a':<br />    putchar ('a');<br />    break;<br />   case 'b':<br />    putchar ('b');<br />    break;<br />   case 'c':<br />    putchar ('c');<br />    break;<br />   case '?':<br />    fprintf (stderr, "Unknown argument %c\n", *Optarg);<br />    return -1;<br />  }<br /> }<br /> putchar ('\n');<br /> return 0;<br />}<br /><br /></pre>It parses 1char arguments, that can be passed in any order.<br />The switch -- forces to stop the parser <br /><br />To program point of view, an argument is a character that<br />belongs to a string prefixed with a '-'

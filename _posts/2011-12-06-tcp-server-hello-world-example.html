@@ -1,0 +1,18 @@
+---
+layout: post
+title: TCP Server Hello World example
+date: '2011-12-06T17:47:00.001-08:00'
+author: Daniel Hilst
+tags:
+- TCP
+- TCP Hello World
+- TCP socket
+- AF_INET
+- socket
+- TCP Server
+modified_time: '2012-01-05T17:25:14.983-08:00'
+blogger_id: tag:blogger.com,1999:blog-8785437776394405849.post-3165424190850629328
+blogger_orig_url: http://gkos-hw.blogspot.com/2011/12/tcp-server-hello-world-example.html
+---
+
+<pre class="brush:c">#include &lt;stdio.h&gt;<br />#include &lt;stdlib.h&gt;<br />#include &lt;string.h&gt;<br />#include &lt;sys/socket.h&gt;<br />#include &lt;sys/types.h&gt;<br />#include &lt;netinet/in.h&gt;<br />#include &lt;netinet/ip.h&gt;<br />#include &lt;netdb.h&gt;<br /><br />#define pexit(s) ({perror(s); exit(EXIT_FAILURE);})<br /><br />#define BUFLEN 0x400<br />static char buf[BUFLEN];<br /><br />int main(int argc, char **argv)<br />{<br /> int srv_sock;<br /> int cli_sock;<br /> int srv_addr_len;<br /> int cli_addr_len;<br /> int error;<br /> int nbytes; <br /> struct sockaddr_in srv_addr;<br /> struct sockaddr_in cli_addr;<br /><br />  <br /> if (argc &lt;= 1) { <br />  printf("Usage: %s PORT\n", argv[0]);<br />  exit(EXIT_FAILURE);<br /> }<br /><br /> srv_sock = socket(PF_INET, SOCK_STREAM, 0);<br /> if (srv_sock &lt; 0)<br />  pexit("socket");<br /><br /><br />        srv_addr_len = sizeof(srv_addr);<br />        bzero(&amp;srv_addr, srv_addr_len);<br />        srv_addr.sin_addr.s_addr = htonl(INADDR_ANY);<br /> srv_addr.sin_family = PF_INET;<br /> srv_addr.sin_port = htons(atoi(argv[1]));<br /><br />        error = bind(srv_sock, (struct sockaddr *)&amp;srv_addr, srv_addr_len);<br />        if (error)<br />                pexit("bind");<br /><br />        error = listen(srv_sock, 5);<br />        if (error)<br />                pexit("listen");<br /><br />        cli_addr_len = sizeof(cli_addr);<br />        while ((cli_sock = accept(srv_sock, (struct sockaddr *)&amp;cli_addr,<br />                                        &amp;cli_addr_len)) != -1) <br />        {<br />                printf("Received connection from %s\n",<br />                                inet_ntoa(cli_addr.sin_addr.s_addr));<br /><br />                nbytes = send(cli_sock, "Hello World\n", strlen("Hello World\n"), 0);<br />                if (nbytes == -1)<br />                        perror("send");<br />                close(cli_sock);<br /> } <br /><br /> close(srv_sock);<br /> return 0;<br />}<br /><br /></pre>

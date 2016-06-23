@@ -1,0 +1,12 @@
+---
+layout: post
+title: t.c
+date: '2009-11-02T22:05:00.000-08:00'
+author: Daniel Hilst
+tags: 
+modified_time: '2009-11-17T08:52:46.675-08:00'
+blogger_id: tag:blogger.com,1999:blog-8785437776394405849.post-6608721054620210135
+blogger_orig_url: http://gkos-hw.blogspot.com/2009/11/t.html
+---
+
+<pre class="brush: cpp">#include &lt;stdio.h&gt;<br />#include &lt;errno.h&gt;<br /><br />int main(void)<br />{<br />FILE *fp;<br />char ch;<br /><br />if(!(fp = fopen(__FILE__, "w+")))<br />{<br />fprintf(stderr, "%s\n", strerror(errno));<br />return(1);<br />}<br /><br />fprintf(fp, "Hello World\n");<br /><br />rewind(fp);<br />while((ch = getc(fp)) != EOF)<br />putchar(ch);<br /><br />return(0);<br />}<br /></pre><br />OUTPUT:<br />Hello World<br /><br />This should work even on codepad.org...<br />this is becase the file that you post is named 't.c'<br />and you have permission to write and read in this file<br />but can not create new files.. try out!<br /><br />If you not understand yet.. try this;;<br /><pre name="code" class="c">#include &lt;stdio.h&gt;<br />#include &lt;errno.h&gt;<br /><br />int<br />main(void)<br />{<br />FILE *fp;<br />char ch;<br /><br />if(!(fp = fopen("t.c", "r"))){<br />fprintf(stderr, "%s\n", strerror(errno));<br />return(1);<br />}<br /><br />printf("I'm the file, my name is %s!\n", __FILE__);<br />printf("and my content is:\n");<br /><br />while((ch = getc(fp)) != EOF)<br />putchar(ch);<br /><br />return(0);<br />}<br /></pre><br /><br />cya

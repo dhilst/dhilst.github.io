@@ -1,0 +1,12 @@
+---
+layout: post
+title: obstack looks cool
+date: '2009-11-25T16:22:00.000-08:00'
+author: Daniel Hilst
+tags: 
+modified_time: '2009-11-25T16:23:43.931-08:00'
+blogger_id: tag:blogger.com,1999:blog-8785437776394405849.post-7877003612834697123
+blogger_orig_url: http://gkos-hw.blogspot.com/2009/11/obstack-looks-cool.html
+---
+
+<pre class="brush: cpp">/*<br />* An obstack is a pool of memory<br />* containing a stack of objects<br />*/<br /><br /><br />#include &lt;stdio.h&gt;<br />#include &lt;stdlib.h&gt;<br />#include &lt;obstack.h&gt;<br /><br /><br />#define obstack_chunk_alloc xmalloc<br />#define obstack_chunk_free free<br />#define obstack_alloc_fail_handler  (fprintf (stderr, "Memory exhausted\n"); exit (EXIT_FAILURE);)<br /><br />static struct obstack string_obstack;<br /><br /><br />void *<br />xmalloc (size_t size)<br />{<br /> register void *value = malloc (size);<br /> if (value == 0)<br />  return 0;<br /> <br /> return value;<br />}<br /><br /><br />char *<br />copystring (struct obstack *obstack_ptr, char *string)<br />{<br /> size_t len = strlen (string) + 1;<br /> char *s = (char *) obstack_alloc (obstack_ptr, len);<br /> memcpy (s, string, len);<br /><br /> return s;<br />}<br /><br /><br />int <br />main (void)<br />{<br /> char *str;<br /><br /> obstack_init (&string_obstack);<br /> str = copystring (&string_obstack, "Hello World");<br /> printf ("%s\n", str);<br /> obstack_free (&string_obstack, str);<br /> return 0;<br />}<br /></pre>

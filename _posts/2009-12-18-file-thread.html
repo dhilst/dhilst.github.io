@@ -1,0 +1,12 @@
+---
+layout: post
+title: Another Hello World using threads
+date: '2009-12-18T16:50:00.001-08:00'
+author: Daniel Hilst
+tags: 
+modified_time: '2009-12-18T17:02:27.542-08:00'
+blogger_id: tag:blogger.com,1999:blog-8785437776394405849.post-3099360801006768356
+blogger_orig_url: http://gkos-hw.blogspot.com/2009/12/file-thread.html
+---
+
+<pre class="brush: c">/*<br /> * file thread.c<br /> * compiling: gcc -o thread thread.c -lpthread<br /> */<br /><br />#include &lt;stdio.h&gt;<br />#include &lt;pthread.h&gt;<br /><br />/*<br /> * Arguments to print_arg<br /> */<br />struct arg<br />{<br />  char * str;<br />  int siz;<br />};<br /><br />/*<br /> * thread function<br /> */<br />void *<br />print_arg (void * arguments)<br />{<br />  struct arg * ptr = (struct arg *) arguments;<br />  write (1, ptr->str, ptr->siz);<br />}<br /><br />int<br />main (void)<br />{<br />  struct arg args = {<br /> "Hello World\n",<br /> 12,<br />  };<br /><br />  /* <br />   * thread atribute<br />   */<br />  pthread_attr_t thread_attr;<br />  <br />  /*<br />   * thread id<br />   */<br />  pthread_t thread;<br /> <br />  /*<br />   * init, set to detach, create it<br />   */<br />  pthread_attr_init (&thread_attr);<br />  pthread_attr_setdetachstate (&thread_attr, PTHREAD_CREATE_DETACHED);<br />  pthread_create (&thread, &thread_attr, &print_arg, &args);<br />  /*<br />   * destroy, this don't deallocate things<br />   */<br />  pthread_attr_destroy (&thread_attr);<br />  return 0;<br />}<br /></pre>Detached thread don't need to return the value to main.. <br />so thread_join isn't needed here... but.. <br />if main return before thread, then thread<br />is interrupted.. this is what people call bug<br />sometime works .. sometime not

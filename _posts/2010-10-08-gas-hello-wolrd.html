@@ -1,0 +1,12 @@
+---
+layout: post
+title: gas hello wolrd
+date: '2010-10-08T11:48:00.001-07:00'
+author: Daniel Hilst
+tags: 
+modified_time: '2010-10-12T18:38:48.115-07:00'
+blogger_id: tag:blogger.com,1999:blog-8785437776394405849.post-6041244038037967813
+blogger_orig_url: http://gkos-hw.blogspot.com/2010/10/gas-hello-wolrd.html
+---
+
+<pre class="brush: as">.text<br />.global&nbsp;_start<br />_start:<br />&nbsp;&nbsp;&nbsp;&nbsp;movl&nbsp;$4,&nbsp;%eax<br />&nbsp;&nbsp;&nbsp;&nbsp;movl&nbsp;$1,&nbsp;%ebx<br />&nbsp;&nbsp;&nbsp;&nbsp;movl&nbsp;$str,&nbsp;%ecx<br />&nbsp;&nbsp;&nbsp;&nbsp;movl&nbsp;$len,&nbsp;%edx<br />&nbsp;&nbsp;&nbsp;&nbsp;int&nbsp;&nbsp;$0x80<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;movl&nbsp;$1,&nbsp;%eax<br />&nbsp;&nbsp;&nbsp;&nbsp;xor&nbsp;&nbsp;%ebx,&nbsp;%ebx<br />&nbsp;&nbsp;&nbsp;&nbsp;int&nbsp;&nbsp;$0x80<br /><br />.data<br /><br />str:<br />&nbsp;&nbsp;&nbsp;&nbsp;.ascii&nbsp;"Hello&nbsp;World"&nbsp;<br />&nbsp;&nbsp;&nbsp;&nbsp;.set&nbsp;len,&nbsp;.&nbsp;-&nbsp;str<br /></pre>

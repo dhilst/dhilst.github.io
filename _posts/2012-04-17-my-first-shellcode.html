@@ -1,0 +1,17 @@
+---
+layout: post
+title: My first shellcode :)
+date: '2012-04-17T22:17:00.002-07:00'
+author: Daniel Hilst
+tags:
+- shellcode hello world
+- shellcode
+- hello world
+- assembly
+- c
+modified_time: '2012-04-17T22:17:31.040-07:00'
+blogger_id: tag:blogger.com,1999:blog-8785437776394405849.post-1364289116241548484
+blogger_orig_url: http://gkos-hw.blogspot.com/2012/04/my-first-shellcode.html
+---
+
+<pre class="brush: c"><br />/*<br /> * File: shello.c<br /> *<br /> * Generated from this assembly code:<br /> *      pushl   %ebp<br /> *      movl    %esp, %ebp<br /> *      <br /> *      subl    $12, %esp<br /> *      movl    $0x6c6c6548, -12(%ebp)<br /> *      movl    $0x6f57206f, -8(%ebp)<br /> *      movl    $0x0a646c72, -4(%ebp)<br /> *      <br /> *      movl    $4, %eax        <br /> *      movl    $1, %ebx<br /> *      leal    -12(%ebp), %ecx <br /> *      movl    $12, %edx <br /> *      <br /> *      int     $0x80<br /> *      addl     $12, %esp<br /> *      <br /> *      leave<br /> *      ret<br /> * <br /> */<br /><br />/*<br /> * Tested on Linux hilstdsk 3.2.7-1-ARCH #1 SMP PREEMPT Tue Feb 21<br /> * 16:59:04 UTC 2012 i686 AMD Athlon(tm) 64 X2 Dual Core Processor<br /> * 4400+ AuthenticAMD GNU/Linux<br /> * Archlinux<br /> */<br /><br />/*<br /> * Compile: gcc -o shello shello.c<br /> * Run: ./shello<br /> * Output: Hello World<br /> */<br /> <br />/*<br /> * Thats pretty cool!<br /> */<br />#include <stdio.h><br /><br />static char shellcode[] = "\x55"<br />        "\x89\xe5"<br />        "\x83\xec\x0c"<br />        "\xc7\x45\xf4\x48\x65\x6c\x6c"<br />        "\xc7\x45\xf8\x6f\x20\x57\x6f"<br />        "\xc7\x45\xfc\x72\x6c\x64\x0a"<br />        "\xb8\x04\x00\x00\x00"<br />        "\xbb\x01\x00\x00\x00"<br />        "\x8d\x4d\xf4"<br />        "\xba\x0c\x00\x00\x00"<br />        "\xcd\x80"<br />        "\x83\xc4\x0c"<br />        "\xc9"<br />        "\xc3";<br /><br />int main(void)<br />{<br />        void (*p)(void);<br />        p = shellcode;<br />        p();<br />        return 0;<br />}<br /><br /></pre>

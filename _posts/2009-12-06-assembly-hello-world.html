@@ -1,0 +1,12 @@
+---
+layout: post
+title: Assembly hello world
+date: '2009-12-06T21:11:00.000-08:00'
+author: Daniel Hilst
+tags: 
+modified_time: '2009-12-06T21:29:08.491-08:00'
+blogger_id: tag:blogger.com,1999:blog-8785437776394405849.post-977376778010068637
+blogger_orig_url: http://gkos-hw.blogspot.com/2009/12/assembly-hello-world.html
+---
+
+<pre class="nerd">section .data<br /> str: db  "Hello World",10<br /> strL: equ  $-str<br /><br />section .text<br /> global _start:<br />_start:<br /> mov  eax, 4<br /> mov  ebx, 1<br /> mov  ecx, str<br /> mov  edx, strL<br /> int   0x80<br /><br /> mov  eax, 1<br /> mov  ebx, 0<br /> int  0x80<br /></pre>

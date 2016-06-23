@@ -1,0 +1,12 @@
+---
+layout: post
+title: Make a Zombie
+date: '2009-12-18T12:51:00.000-08:00'
+author: Daniel Hilst
+tags: 
+modified_time: '2009-12-18T12:52:26.023-08:00'
+blogger_id: tag:blogger.com,1999:blog-8785437776394405849.post-5354923053113236404
+blogger_orig_url: http://gkos-hw.blogspot.com/2009/12/make-zombie.html
+---
+
+<pre class="brush: c">/*<br />* file: make-zombie.c<br />* compiling: gcc -o make-zombie make-zombie.c<br />* This will make a Zombie Process that will endure<br />* for 1 minute, or at least up to you press Ctrl-c<br />*/<br />#include &lt;stdio.h&gt;<br />#include &lt;unistd.h&gt;<br /><br />int<br />main (void)<br />{<br />  int child_return, child_pid = fork();<br /><br />  if (child_pid != 0) <br />    /*<br />     * I'm the parent process<br />     */<br />    sleep (60);<br />  wait (&child_return);<br />  return 0;<br />}<br /></pre>

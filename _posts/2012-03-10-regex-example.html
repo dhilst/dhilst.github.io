@@ -1,0 +1,16 @@
+---
+layout: post
+title: regex example
+date: '2012-03-10T10:28:00.000-08:00'
+author: Daniel Hilst
+tags:
+- regex
+- extended regex
+- POSIX regex
+- regexp
+modified_time: '2012-03-10T10:33:17.838-08:00'
+blogger_id: tag:blogger.com,1999:blog-8785437776394405849.post-3826407727899014014
+blogger_orig_url: http://gkos-hw.blogspot.com/2012/03/regex-example.html
+---
+
+<pre class="brush:c"><br />/*<br /> * File: regex.c<br /> * <br /> * This is a sample regex usage, gets three arguments. It is a grep<br /> * like tool.  <br /> * -f &lt;FILE&gt; -> A file to be read if omited or - stdin is read <br /> * -p &lt;PATTERN&gt; -> The pattern to be matched agains every line on FILE <br /> * -v -&gt; Invert the match, as like grep -v.<br /> *<br /> * Compiling: gcc -o preg regex.c <br /> */<br /> <br /><br />#include &lt;stdio.h&gt;<br />#include &lt;string.h&gt;<br />#include &lt;stdlib.h&gt;<br />#include &lt;regex.h&gt;<br />#include &lt;unistd.h&gt;<br />#include &lt;getopt.h&gt;<br /><br /><br /><br />int main(int argc, char **argv)<br />{<br />        regex_t reg;<br />        char pattern[256];<br />        int status;<br />        char buf[256];<br />        FILE *fp = NULL;<br />        int opt;<br />        int inverted = 0;<br />        <br />        while ((opt = getopt(argc, argv, "vp:f:")) != -1) {<br />                switch (opt) {<br />                case 'v':<br />                        inverted = 1;<br />                        break;<br />                case 'p':<br />                        strncpy(pattern, optarg, 256);<br />                        break;<br />                case 'f':<br />                        if (optarg[0] == '-') {<br />                                fp = stdin;<br />                        } else {<br />                                fp = fopen(optarg, "r");<br />                                if (!fp) {<br />                                        perror("fopen");<br />                                        exit(EXIT_FAILURE);<br />                                }<br />                        }<br />                        break;<br />                }<br />                /* printf("%c\n", opt); */<br />        }<br /><br />        if (!fp)<br />                fp = stdin;<br /><br />        status = regcomp(&amp;reg, pattern, REG_EXTENDED | REG_NOSUB);<br />        if (status != 0)<br />        {<br />                fprintf(stderr, "Compiling the regular expression \"%s\" failed.\n", pattern);<br />                exit(EXIT_FAILURE);<br />        }<br /><br /><br />        while (fgets(buf, 256, fp)) {<br />                status = regexec(&amp;reg, buf,<br />                                 /* nmatch = */ 0,<br />                                 /* pmatch = */ NULL,<br />                                 /* eflags = */ 0);<br /><br />                if (inverted ? status : !status) {<br />                        printf("%s", buf);<br />                }<br />        }<br /><br />        return 0;<br />}<br /><br /></pre>

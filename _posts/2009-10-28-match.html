@@ -1,0 +1,12 @@
+---
+layout: post
+title: match.c
+date: '2009-10-28T20:57:00.001-07:00'
+author: Daniel Hilst
+tags: 
+modified_time: '2009-12-10T14:26:04.626-08:00'
+blogger_id: tag:blogger.com,1999:blog-8785437776394405849.post-6801342260081588579
+blogger_orig_url: http://gkos-hw.blogspot.com/2009/10/match.html
+---
+
+<pre class="brush: cpp">#include &lt;stdio.h&gt;<br /><br /><br />char *match(char *smaller, char *bigger)<br />{<br /> char *addr, *smaddr;<br />  smaddr = smaller;<br />  for(; *bigger != 0; bigger++){<br />    if(*smaller == *bigger){<br />     addr = bigger;<br />     while(*smaller == *bigger){<br />       if(*(smaller+1) == 0)<br />          return(addr);<br />       if(*(bigger+1) == 0)<br />         return(0);<br />      smaller++; bigger++;<br />     } <br />     smaller = smaddr;<br />   }<br /> }<br /> return 0;<br />}<br /><br />int main(int argc, char **argv)<br />{<br />  char *s1, *s2, *chk;<br />  s1 = "Here is what I say for the METAL:"<br />         " Hello"/*METAL*/" World!";<br />  s2 = "Hello World";<br />  chk = match(s2, s1);<br />  printf("%s", chk);<br />  return 0;<br />}<br /></pre><br />OUTPUT:<br />Hello World!

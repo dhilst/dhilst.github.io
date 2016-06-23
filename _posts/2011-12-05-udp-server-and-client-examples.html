@@ -1,0 +1,17 @@
+---
+layout: post
+title: UDP, Server and Client examples
+date: '2011-12-05T16:49:00.001-08:00'
+author: Daniel Hilst
+tags:
+- UDP
+- udp server
+- c
+- udp client
+- udp examples
+modified_time: '2012-01-05T17:24:36.808-08:00'
+blogger_id: tag:blogger.com,1999:blog-8785437776394405849.post-7331356392056604591
+blogger_orig_url: http://gkos-hw.blogspot.com/2011/12/udp-server-and-client-examples.html
+---
+
+<pre class="brush: c">/*<br /> * udpserver.c<br /> *<br /> * UDP Server example<br /> */<br /> <br />#include &lt;stdio.h&gt;<br />#include &lt;string.h&gt;<br />#include &lt;stdlib.h&gt;<br />#include &lt;sys/socket.h&gt;<br />#include &lt;netinet/in.h&gt;<br /><br />#define pexit(s) ({perror(s); exit(EXIT_FAILURE);})<br /><br />int main(int argc, char **argv)<br />{<br />#define BUFLEN 1000<br />        char buf[BUFLEN];<br />        int sock, error, clilen, bytes;<br />        struct sockaddr_in srv, cli; <br />        <br />        if (argc &lt; 2) {<br />                printf("Usage: %s PORT\n", argv[0]);<br />                exit(EXIT_FAILURE);<br />        }<br /><br />        sock = socket(AF_INET, SOCK_DGRAM, 0);<br />        if (sock == -1)<br />                pexit("socket");<br /><br /><br />        memset(&amp;srv, 0, sizeof(srv));<br />        srv.sin_family =  AF_INET;<br />        srv.sin_port = htons(atoi(argv[1]));<br />        srv.sin_addr.s_addr = htonl(INADDR_ANY);<br /><br />        error = bind(sock, (struct sockaddr *)&amp;srv, sizeof(srv));<br /><br />        for (;;) {<br />               clilen = sizeof(cli);<br />               bytes = recvfrom(sock, buf, BUFLEN, 0, (struct sockaddr *)&amp;cli,<br />                               &amp;clilen);<br />               if (bytes == -1)<br />                       pexit("recvfrom");<br /><br />               printf("received data from %s\n",<br />                               inet_ntoa(cli.sin_addr.s_addr));<br />               buf[bytes] = '\0';<br />               printf("&gt;&gt;%s&lt;&lt;\n", buf);<br />        }<br />        return 0;<br />} <br /><br /><br /></pre><pre class="brush: c">/*<br /> * udpclient.c<br /> *<br /> * UDP client example<br /> */<br /><br />#include &lt;stdio.h&gt;<br />#include &lt;string.h&gt;<br />#include &lt;stdlib.h&gt;<br />#include &lt;sys/socket.h&gt;<br />#include &lt;netinet/in.h&gt;<br /><br />#define pexit(s) ({perror(s); exit(EXIT_FAILURE);})<br /><br />int main(int argc, char **argv)<br />{<br />        int sock, error, srvlen, bytes;<br />        struct sockaddr_in srv;<br />        <br />        if (argc &lt;= 2) {<br />                printf("Usage: %s IP PORT\n", argv[0]);<br />                exit(EXIT_FAILURE);<br />        }<br /><br />        sock = socket(AF_INET, SOCK_DGRAM, 0);<br />        if (sock == -1)<br />                pexit("socket");<br /><br /><br />        memset(&amp;srv, 0, sizeof(srv));<br />        srv.sin_family =  AF_INET;<br />        srv.sin_port = htons(atoi(argv[2]));<br />        srv.sin_addr.s_addr = inet_addr(argv[1]);<br /><br />        bytes = sendto(sock, "Hello World", strlen("Hello World"), 0,<br />                        (struct sockaddr *)&amp;srv, sizeof(srv));<br />        if (bytes == -1)<br />                pexit("sendto");<br /><br />        close(sock);<br /><br />        return 0;<br />} <br /><br /><br /></pre>

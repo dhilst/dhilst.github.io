@@ -1,0 +1,12 @@
+---
+layout: post
+title: Shared memory hello world
+date: '2009-12-28T22:23:00.000-08:00'
+author: Daniel Hilst
+tags: 
+modified_time: '2009-12-28T23:18:31.633-08:00'
+blogger_id: tag:blogger.com,1999:blog-8785437776394405849.post-3738952039109408677
+blogger_orig_url: http://gkos-hw.blogspot.com/2009/12/shared-memory-hello-world.html
+---
+
+<pre class="brush: c">/*<br /> * file: shared-memory-write.c<br /> */<br /><br />#include &lt;stdio.h&gt;<br />#include &lt;sys/shm.h&gt;<br /><br /><br />int<br />main (void)<br />{<br />  key_t key = 2525;<br />  char * shared_memory;<br />  int segment_size = 0x6400;<br />  int segment_id;<br />  <br />  segment_id = shmget (key, segment_size, IPC_CREAT | 0666);<br />  shared_memory = shmat (segment_id, NULL, 0);<br />  sprintf (shared_memory, "Hello World");<br />  <br />  while (1)<br /> sleep (1);<br />  <br />  return 0;<br />}<br /></pre><br /><pre class="brush: c">/*<br /> * file: shared-memory-read.c<br /> */<br /><br />#include &lt;stdio.h&gt;<br />#include &lt;sys/shm.h&gt;<br /><br />int <br />main (void)<br />{<br />  int segment_id; <br />  key_t key = 2525;<br />  char * shared_memory;<br />  int segment_size = 0x6400;<br />  <br />  segment_id = shmget (key, segment_size, 0666);<br />  shared_memory = shmat (segment_id, NULL, 0);<br />  printf ("%s\n", shared_memory);<br />  <br />  shmdt (shared_memory);<br />  shmctl (segment_id, IPC_RMID, 0);<br /><br />  return 0;<br />}<br /></pre>run ./shared-memory-write<br />and in another shell ./shared-memory-read.c <br />then in first shell kill shared-memorr-write with Ctrl-c

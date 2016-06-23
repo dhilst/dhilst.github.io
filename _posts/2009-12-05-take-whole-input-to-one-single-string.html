@@ -1,0 +1,12 @@
+---
+layout: post
+title: Take the whole input to one single string (or explode the memory of your box)
+date: '2009-12-05T14:49:00.000-08:00'
+author: Daniel Hilst
+tags: 
+modified_time: '2009-12-05T16:51:06.883-08:00'
+blogger_id: tag:blogger.com,1999:blog-8785437776394405849.post-2430470116776722359
+blogger_orig_url: http://gkos-hw.blogspot.com/2009/12/take-whole-input-to-one-single-string.html
+---
+
+<pre class="brush: cpp">#include &lt;stdio.h&gt;<br />#include &lt;stdlib.h&gt;<br />#include &lt;string.h&gt;<br /><br />#define EXIERR(n,str) fprintf(stderr, str "\n");exit n<br /><br />void *<br />xrealloc (void *ptr, size_t size)<br />{<br /> void *value = realloc (ptr, size);<br /> if (value == 0)<br />  EXIERR(-1, "Can't xrealloc");<br /> return value;<br />}<br /><br />char *<br />readinput (void)<br />{<br /> char *str, buf[10];<br /> int nbytes;<br /> str = NULL;<br /> nbytes = read(0, buf, 10);<br /> if (nbytes == -1)<br />    EXIERR(-1, "Error while trying to read from input");<br /> str = xrealloc (str, nbytes);<br /> strncpy (str, buf, nbytes);<br /> if (nbytes < 10) {<br />  /* chop the new line char */<br />  str[nbytes - 1] = 0;<br />  return str;<br /> }<br /><br /> while ((nbytes = read (0, buf, 10)) > 0) {<br />  str = xrealloc (str, <br />    (strlen (str) + nbytes ));<br />  strncat (str, buf, nbytes);<br /> }<br /> if (nbytes == -1)<br />    EXIERR(-1, "Error while trying to read from input");<br /> /* <br />  * the last char is a new line <br />  * chop it <br /> */<br /> str[ strlen (str) -1 ] = 0; <br /> return str;<br />}<br /><br />int <br />main (void)<br />{<br /> char *str;<br /> str = readinput();<br /> puts (str);<br /> free (str);<br /> return 0;<br />}  <br /></pre><br />The algorithm is:<b><br /><pre>read from input <br />put the bytes in buf<br />allocate first nbytes to str<br />copy buf to str<br />if nbytes < 10<br /> end str with 0<br /> return str<br />else<br /><br />read from input<br /> put the bytes in buf<br /> allocate more nbytes to str<br /> concatenate buf in str<br /><br />if there is no more input <br /> end str with 0<br /> return str<br /></pre></b><br />cheers (:<br /><br />It's me again editing...<br /><br />Some times this program crashes when the sorce file is passed as input.. like<br />$ ./a.out < source_file.c<br /><br />raises a two free() error

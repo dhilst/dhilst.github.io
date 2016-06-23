@@ -1,0 +1,12 @@
+---
+layout: post
+title: Java looks handy
+date: '2010-10-06T09:42:00.000-07:00'
+author: Daniel Hilst
+tags: 
+modified_time: '2010-10-06T09:48:47.013-07:00'
+blogger_id: tag:blogger.com,1999:blog-8785437776394405849.post-2421750980665858998
+blogger_orig_url: http://gkos-hw.blogspot.com/2010/10/java-looks-handy.html
+---
+
+<pre class="brush: java">import java.awt.Container;<br />import java.awt.FlowLayout;<br />import java.awt.event.*;<br />import javax.swing.*;<br /><br />class GHelloWorld extends JFrame<br />  implements ActionListener{<br /> Container cp;<br /> JLabel lb;<br /> JButton bt;<br /> <br /> public GHelloWorld( ) {<br />  cp =  this.getContentPane( ); <br />  cp.setLayout(new FlowLayout( )); <br />  lb = new JLabel("Hello World");<br />  cp.add(lb);<br />  bt = new JButton ("Hi, there!");<br />  bt.addActionListener(this);<br />  cp.add(bt);<br /> }<br /> <br /> public void actionPerformed(ActionEvent e) {<br />  System.out.println("Hello World");<br />  System.exit(0);<br /> } <br /><br /> static public void main (String[ ] args) {<br />  GHelloWorld cf = new  GHelloWorld( );<br />  cf.setTitle("Hello World");<br />  cf.setSize(400,300);<br />  cf.setVisible(true);<br /> }<br />} <br /></pre><br />A gui hello world example.. I really like the ideia<br />of code once and distribute it for every one on<br />almost all systems. I read <img src="http://www.livrariadafisica.com.br/capas/22603.jpg" /><br />(3 days reading) and like it. I need more time to get used with gui API and<br />a little bit of pratice. I do not intend to become a java programer, I love C, C is everything!!<br />But java is really handy, really really handy.  (:<br />I want to translante <a href="http://github.com/gkos/downseq">this</a> to java<br />Yes I do this in python.. First in shell, than python.. and now I want it in java with gui and<br />friendly manage.

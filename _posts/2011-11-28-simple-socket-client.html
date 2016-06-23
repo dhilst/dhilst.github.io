@@ -1,0 +1,20 @@
+---
+layout: post
+title: Simple socket client
+date: '2011-11-28T18:35:00.001-08:00'
+author: Daniel Hilst
+tags:
+- PF_INET
+- TCP
+- linux
+- AF_INET
+- socket client
+- socket
+- sockets
+modified_time: '2011-11-28T18:49:37.048-08:00'
+thumbnail: http://2.bp.blogspot.com/-BFxIT8Tkwa8/TtRHOV2kVPI/AAAAAAAAALU/U3LBQpeLlvQ/s72-c/2011-11-29-004346_610x344_scrot.png
+blogger_id: tag:blogger.com,1999:blog-8785437776394405849.post-6459859971214867196
+blogger_orig_url: http://gkos-hw.blogspot.com/2011/11/simple-socket-client.html
+---
+
+This sample application will connect to addres passed as first argument <br />and port passed as second argument. Then will send everything received from stdin <br />to that socket and send everything received as answer from socket to stdout. Simple!<br />Type quit to exit. <br /><br />Is useful when you need to rember how to setup PF_INET sockects and when you need something simple <br />to talk with some socket. <br /><br />Note: I have used `~' character as prompt. <br /><br /><pre class="brush: c">#include &lt;stdio.h&gt;<br />#include &lt;stdlib.h&gt;<br />#include &lt;string.h&gt;<br />#include &lt;sys/socket.h&gt;<br />#include &lt;sys/types.h&gt;<br />#include &lt;netinet/in.h&gt;<br />#include &lt;netinet/ip.h&gt;<br />#include &lt;netdb.h&gt;<br /><br />#define pexit(s) ({perror(s); exit(EXIT_FAILURE);})<br /><br />#define BUFLEN 0x400<br />static char buf[BUFLEN];<br /><br />int main(int argc, char **argv)<br />{<br />    int sock;<br />    int addr_len;<br />    int error;<br />    struct sockaddr_in addr;<br />    struct hostent *host;<br /><br />        <br />    if (argc &lt;= 2) { <br />        printf("Usage: %s address port\n", argv[0]);<br />        exit(EXIT_FAILURE);<br />    }<br /><br />    sock = socket(PF_INET, SOCK_STREAM, 0);<br />    if (sock &lt; 0)<br />        pexit("socket");<br /><br /><br />    host = gethostbyname(argv[1]);<br />    if (!host)<br />        pexit("gethostbyname");<br /><br />    memcpy(&amp;addr.sin_addr.s_addr, host-&gt;h_addr_list[0], sizeof(struct<br />                sockaddr_in));    <br />    addr.sin_family = PF_INET;<br />    addr.sin_port = htons(atoi(argv[2]));<br /><br />    error = connect(sock, (struct sockaddr *)&amp;addr, sizeof addr);<br />    if (error)<br />        pexit("connect");<br /><br />    for (;;) {<br />        printf("~ "); /* my prompt */<br />        fgets(buf, BUFLEN, stdin);    <br />        if (!strcmp(buf, "quit\n"))<br />            break;<br /><br />        error = send(sock, buf, strnlen(buf, BUFLEN), 0);        <br />        if (error == -1) /* error */<br />            pexit("send");<br /><br />        error = recv(sock, buf, BUFLEN, 0);<br />        if (error == -1)<br />            pexit("recv");<br /><br />        printf(buf);<br />    }    <br /><br />    close(sock);<br />    return 0;<br />}<br /><br /></pre>Testing:<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://2.bp.blogspot.com/-BFxIT8Tkwa8/TtRHOV2kVPI/AAAAAAAAALU/U3LBQpeLlvQ/s1600/2011-11-29-004346_610x344_scrot.png" imageanchor="1" style="clear: left; float: left; margin-bottom: 1em; margin-right: 1em;"><img border="0" src="http://2.bp.blogspot.com/-BFxIT8Tkwa8/TtRHOV2kVPI/AAAAAAAAALU/U3LBQpeLlvQ/s1600/2011-11-29-004346_610x344_scrot.png" /></a></div><br /><br />

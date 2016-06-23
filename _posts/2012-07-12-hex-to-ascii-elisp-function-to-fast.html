@@ -1,0 +1,19 @@
+---
+layout: post
+title: hex-to-ascii elisp function to fast decode protected donwload urls
+date: '2012-07-12T20:08:00.001-07:00'
+author: Daniel Hilst
+tags:
+- emacs
+- url
+- urls
+- hex
+- ascii
+- elisp
+- hex urls
+modified_time: '2012-07-16T19:40:35.053-07:00'
+blogger_id: tag:blogger.com,1999:blog-8785437776394405849.post-5079138890672007076
+blogger_orig_url: http://gkos-hw.blogspot.com/2012/07/hex-to-ascii-elisp-function-to-fast.html
+---
+
+Is really common to face download urls being "protected" but some annoying ringtone site. Some of then are so stupid that just encode the url as an hexadecimal string. Here is an example <a href="http://www.baixedetudo.net/id/?url=687474703a2f2f756c2e746f2f6f7977366b667732">http://www.baixedetudo.net/id/?url=687474703a2f2f756c2e746f2f6f7977366b667732</a>. Is easy to see the url here. I used perl to decode this, simple as in<br /><pre class="brush:perl">print pack("H*", "687474703a2f2f756c2e746f2f6f7977366b667732"), "\n";<br /></pre>But as much I become an "emacs guy" more I do to easy my life. <br />Here is what I use from now to translate urls from hex to ascii The function usage is simple, just select the hex text and run it, you should get the translated text on clipboard.. You should be running emacs in its graphical form.  <br /><pre class="brush:cl">(defun hex-to-ascii (b e)<br />  "Translate the region from hex to ascii and copy it to clipboard.<br />I use that to translate urls in hex and paste it to url bar on my<br />browser."<br />  (interactive "r")<br />  (save-excursion<br />    (let ((i e)<br />           (x-select-enable-clipboard t)<br />           s)<br />      (while (&gt; i b)<br />        (setq s (concat (format "%c" (read (concat "#x" (buffer-substring-no-properties (- i 2) i)))) s))<br />        (setq i (- i 2)))<br />      (kill-new s t)<br />      (message (format "%s copied to clip board" s)))))<br /><br /></pre>I just keep this on my init.el.<br /><br />Also I have done the <span class="short_text" id="result_box" lang="en"><span class="hps">opposite, a function that takes ascii string and returns its hex representation&nbsp;</span></span><br /><pre class="brush:cl"><br />(defun ascii-to-hex (b e)<br />  "Translate an ascii string to a hex string and copy it to clipboard"<br />  (interactive "r")<br />  (save-excursion<br />    (let ((i b)<br />          (x-select-enable-clipboard t)<br />          s)<br />      (while (< i e)<br />        (setq s (concat s (format "%x" (get-byte i))))<br />        (setq i (+ i 1)))<br />      (kill-new s t)<br />      (message s))))<br /></pre><br />Nice and Easy :-)

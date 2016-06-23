@@ -1,0 +1,12 @@
+---
+layout: post
+title: 'XOR encryption looks realy funny (: -> encrypt.c'
+date: '2009-11-27T19:14:00.000-08:00'
+author: Daniel Hilst
+tags: 
+modified_time: '2009-11-27T19:28:45.826-08:00'
+blogger_id: tag:blogger.com,1999:blog-8785437776394405849.post-4455832552262719590
+blogger_orig_url: http://gkos-hw.blogspot.com/2009/11/xor-encryption-looks-realy-fun-encryptc.html
+---
+
+<pre class="brush: cpp">#include &lt;stdio.h&gt;<br />#include &lt;string.h&gt;<br />#include &lt;errno.h&gt;<br />#include &lt;fcntl.h&gt;<br /><br />#define crpt(byte,key) (byte^key)<br /><br />int<br />main (int argc, char *argv[])<br />{<br /> int f1, f2, n;<br /> char unbuf;<br /> <br /> if (argc &lt; 4) <br />  error (-1, EINVAL, "Error, argument fault",<br />     argv[0]);<br /> <br /> if ((strlen (argv[3])) &lt;= 2)<br />  error (-1, EINVAL, "Error, encyrpt key is "<br />    "too short (less then 3 characters)");<br /> <br /> if ((f1 = open (argv[1], O_RDONLY)) == -1) <br />  err (-1, "Error, while trying to open "<br />    "file %s for read", argv[1]);<br /><br /> if ((f2 = creat (argv[2], 0644)) == -1)<br />  err (-1, "Error, while trying to create/open "<br />    "file %s for write", argv[2]);<br /><br /> while ((n = read (f1, &amp;unbuf, 1)) &gt; 0) <br /> {<br />  char *key = argv[3];<br />  <br />  if ((key+1) == '\0')<br />   key = argv[3];<br />  unbuf = crpt(unbuf, *key);<br /><br />  if ((write (f2, &amp;unbuf, 1)) == -1)<br />   err(-1, "Error while trying to write "<br />    "in file %s", argv[2]);<br />  key++; <br /> }<br />  <br /> return 0;<br />}<br /><br /></pre>usage: ./ecrypt source_file encrypted_file crypt_key<br />This little program will take the source_file, encrypt it, and write <br />the result in the encrypted_file using the crypt_key<br /><br />You can decrypt the encrypted_file using the same crypt_key.. like<br />./encrypt encrypted_file decrypted_file same_crypt_key<br /><br />this is funny! :-)

@@ -1,0 +1,12 @@
+---
+layout: post
+title: cat that print name before lines, just bullshit
+date: '2009-11-24T18:48:00.000-08:00'
+author: Daniel Hilst
+tags: 
+modified_time: '2009-11-24T18:48:05.304-08:00'
+blogger_id: tag:blogger.com,1999:blog-8785437776394405849.post-5733956410505372028
+blogger_orig_url: http://gkos-hw.blogspot.com/2009/11/cat-that-print-name-before-lines-just.html
+---
+
+<pre class="brush: cpp">#include &lt;stdio.h&gt;<br />#include &lt;errno.h&gt;<br /><br />int<br />main (int argc, char **argv)<br />{<br /> FILE *fp;<br /> char *line, buf[99];<br /><br /> if (argc < 2)<br />  return -1;<br /> <br /> argv++; <br /> for (; argc > 1; argc--, argv++)<br /> {<br />  if (! (fp = fopen (*argv, "r")))<br />   error (1,errno);<br /><br />  while ((line = fgets(buf, 99, fp)) != NULL)<br />   printf ("%s: %s",  *argv, line);<br /> }<br /> return 0;<br />}<br /></pre>

@@ -1,0 +1,12 @@
+---
+layout: post
+title: 
+date: '2009-10-28T20:44:00.000-07:00'
+author: Daniel Hilst
+tags: 
+modified_time: '2009-10-28T21:11:44.346-07:00'
+blogger_id: tag:blogger.com,1999:blog-8785437776394405849.post-3268279245776628139
+blogger_orig_url: http://gkos-hw.blogspot.com/2009/10/include-by-gkos-char-reversechar-int.html
+---
+
+reverse.c<br /><pre name="code" class="c"><br />#include &lt;stdio.h&gt;<br />/* by gkos */<br /><br />char *reverse(char *);<br /><br />int main(){<br /> char *string;<br /> string = "dlrow olleh";<br /> printf("%s\n", reverse(string));<br /> return(0);<br />}<br /> <br />char *reverse(char *p){<br /> char *q, *r, *s;<br /> void *malloc();<br /> q = p;<br /> r = s = (char *)malloc(sizeof p);<br /> for(;*p != 0; p++)<br />  ; /*_*/<br /> for(--p; p != q; p--, s++)<br />  *s = *p;<br /> *s = *p; *++s = 0;<br /> return(r);<br />}<br /></pre><br />OUTPUT:<br />hello world

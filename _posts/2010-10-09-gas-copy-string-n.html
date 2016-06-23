@@ -1,0 +1,12 @@
+---
+layout: post
+title: gas copy string n ;-)
+date: '2010-10-09T09:26:00.000-07:00'
+author: Daniel Hilst
+tags: 
+modified_time: '2010-10-12T18:39:11.638-07:00'
+blogger_id: tag:blogger.com,1999:blog-8785437776394405849.post-6144339119276902912
+blogger_orig_url: http://gkos-hw.blogspot.com/2010/10/gas-copy-string-n.html
+---
+
+<pre class="brush: as">#<br /># void<br /># mycpynstr (char *dst, char *src, int n)<br /># {<br />#     while (n--)<br />#         *dst++ = *src++;<br /># }<br />#<br />    .file    "cpystr.c"<br />    .text<br />.globl mycpynstr<br />    .type    cpynstr, @function<br />mycpynstr:<br />    pushl    %ebp<br />    movl    %esp, %ebp<br />    jmp    .L2             # goto (.L2)<br /><br />#   *dst++ = *src++ at line 6<br />.L3:<br />    movl    12(%ebp), %eax #     move src to %eax  <br />    movzbl    (%eax), %edx #     %dl = (char *) %eax # (src) <br />    movl    8(%ebp), %eax  #     move dst to %eax<br />    movb    %dl, (%eax)    #     *dst = *src<br />    addl    $1, 8(%ebp)    #     src++ <br />    addl    $1, 12(%ebp)   #     dst++ <br /><br /># while (n--) at line 5<br />.L2:<br />    cmpl    $0, 16(%ebp)   #   if (n != 0) <br />    setne    %al           #     %al = 1<br />    subl    $1, 16(%ebp)   #   n--<br />    testb    %al, %al      #   if (%al)    <br />    jne    .L3             #     goto (.L3)<br />    popl    %ebp           #   else<br />    ret                    #     return<br /><br />    .size    mycpynstr, .-mycpynstr<br />    .ident    "GCC: (GNU) 4.5.1"<br />    .section    .note.GNU-stack,"",@progbits<br /></pre>I made this with `gcc -S cpystr.c' where cpystr.c contains the mycpynfunction<br />defined as in first eight lines in this file. Then I open the file cpystr.s<br />created by gcc and add the coments. Nothing more was changed.<br />The comments tell in C language what is happening. But I not sure if<br />every comment is exactly right... its just how I understand the code. The<br />comments start with `#' character and extends to the end of line.<br />Cheers :-)

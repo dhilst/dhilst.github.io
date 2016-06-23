@@ -1,0 +1,12 @@
+---
+layout: post
+title: escaping < and > to sintaxhighlighter
+date: '2009-12-30T04:10:00.000-08:00'
+author: Daniel Hilst
+tags: 
+modified_time: '2009-12-30T04:18:02.397-08:00'
+blogger_id: tag:blogger.com,1999:blog-8785437776394405849.post-1291151224572712301
+blogger_orig_url: http://gkos-hw.blogspot.com/2009/12/escaping-to-sintaxhighlighter.html
+---
+
+To put code here I use sintaxhighlighter, a great tool to color and indent my codes.<br />The only problem is have to escape '<' and '>' characters.. that are really commons <br />in C source files.. <br />I was making this by hand.. ybut my codes are becoming larger.. so I make<br />this little perl scrip to do boring thigs to me<br /><pre class="brush: perl">#!/usr/bin/perl<br /><br />use warnings;<br />use strict;<br /><br />$/ = undef;<br />my ($file) = @ARGV;<br />open (F, "&lt;$file") || die $!;<br />my $str = &lt;F&gt;;<br />$str =~ s/&lt;/&&#0;lt;/g;<br />$str =~ s/&gt;/&&#0;gt;/g;<br /><br />print $str;<br /></pre>I named it as make_htmlable O_O..<br />so you can use like this:<br />./make_htmlable c-source-file.c | xclip<br />and then paste the code between &lt;pre&gt;&lt;/pre&gt;<br />tags with midle mouse buttom<br />ps: xclip read input and save in clipboard.. so u can paste as above

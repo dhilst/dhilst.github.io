@@ -1,0 +1,12 @@
+---
+layout: post
+title: 
+date: '2009-10-28T20:51:00.000-07:00'
+author: Daniel Hilst
+tags: 
+modified_time: '2009-11-17T08:19:43.770-08:00'
+blogger_id: tag:blogger.com,1999:blog-8785437776394405849.post-5377291992126774323
+blogger_orig_url: http://gkos-hw.blogspot.com/2009/10/ordarray.html
+---
+
+ordarray.c<br /><pre class="brush: cpp">#include &lt;stdio.h&gt;<br /><br />int chkar(int *aip){<br />for(; *(aip+1) != 0; aip++){<br />if(*aip > *(aip+1))<br />return(1);<br />}<br />return(0);<br />}<br /><br />void ord(int *aip){<br />int tmp;<br />for(; *(aip+1) != 0; aip++){<br />if(*aip > *(aip+1)){<br />tmp = *aip;<br />*aip = *(aip+1);<br />*(aip+1) = tmp;<br />}<br />}<br />}<br /><br />void ordar(int *aip){<br />while(chkar(aip))<br />ord(aip);<br />}<br /><br />int main(){<br />int ari[] = {2,3,7,9,4,1,5,8,6,0};<br />int *pi;<br />ordar(ari);<br />for(pi = ari;*pi != 0; pi++)<br />printf("%d, ", *pi);<br />putchar('\n');<br />return(0);<br />}<br /></pre><br />OUTPUT:<br />1, 2, 3, 4, 5, 6, 7, 8, 9,

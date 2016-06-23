@@ -1,0 +1,12 @@
+---
+layout: post
+title: Thread Hello World
+date: '2009-12-18T12:10:00.000-08:00'
+author: Daniel Hilst
+tags: 
+modified_time: '2009-12-18T12:10:44.007-08:00'
+blogger_id: tag:blogger.com,1999:blog-8785437776394405849.post-4802277672959940656
+blogger_orig_url: http://gkos-hw.blogspot.com/2009/12/thread-hello-world.html
+---
+
+<pre class="brush: cpp">/*<br /> * File thread_hello.c<br /> * Compiling: gcc -o thread-hello thread_hello.c -lpthread<br /> */<br />#include &lt;stdio.h&gt;<br />#include &lt;pthread.h&gt;<br /><br />void *<br />print_hello (void * arg)<br />{<br />  printf ("Hello World\n");<br />  return NULL;<br />}<br /><br />int <br />main (void)<br />{<br />  pthread_t thread_1_id;<br />  pthread_create (&thread_1_id, NULL, &print_hello, NULL);<br />  /*<br />   * Main need be the last funtion to return<br />   */<br />  pthread_join (thread_1_id, NULL);<br />  return 0;<br />}<br /></pre>

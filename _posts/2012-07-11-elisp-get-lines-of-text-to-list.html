@@ -1,0 +1,17 @@
+---
+layout: post
+title: elisp - get lines of text to a list
+date: '2012-07-11T21:01:00.000-07:00'
+author: Daniel Hilst
+tags:
+- emacs
+- lines
+- process text
+- elisp
+- lists
+modified_time: '2012-07-11T21:17:38.361-07:00'
+blogger_id: tag:blogger.com,1999:blog-8785437776394405849.post-800600784650108750
+blogger_orig_url: http://gkos-hw.blogspot.com/2012/07/elisp-get-lines-of-text-to-list.html
+---
+
+Here is an example of how get lines of text on a list.. I think I will use this on future for process text... Also I'm exercising my elisp skills since I want to be able to process text programmatically.  <pre class="brush:cl"><br />;; This text will be obtained <br />;; by the function get-lines<br />;; It takes two parameters<br />;; The first being the start line (inclusive)<br />;; from with the text will be gathered <br />;; The second being the end line (exclusive)<br />;; Nice and easy!! :-)<br /><br />(defun get-beginning-of-line ()<br />  "Get the point at the beginning of line"<br />  (save-excursion<br />    (beginning-of-line)<br />    (point)))<br /><br />(defun get-end-of-line ()<br />  "Get the point at the end of line"<br />  (save-excursion<br />    (end-of-line)<br />    (point)))<br /><br />(defun programmatic-goto-line (line)<br />  "As goto-line but better for programming stuff"<br />  (goto-char (point-min))<br />  (forward-line (- line 1)))<br /><br /><br />(defun get-lines (start-line end-line)<br />  "Return a list with the lines between START-LINE (inclusive) and END-LINE (exclusive)"<br />  (save-excursion<br />    (programmatic-goto-line end-line)<br />    (let (lines)<br />      (while (< start-line (line-number-at-pos))<br />        (forward-line -1)<br />        (setq lines (cons (buffer-substring-no-properties (get-beginning-of-line) (get-end-of-line)) lines)))<br />      lines)))<br />      <br />               <br />;; Example<br />(let (v)<br />  (dolist (v (get-lines 1 7))<br />    (princ (format "%s\n" v))))<br /><br />;; This text will be obtained <br />;; by the function get-lines<br />;; It takes two parameters<br />;; The first being the start line (inclusive)<br />;; from with the text will be gathered <br />;; The second being the end line (exclusive)<br />nil<br /><br /><br /></pre>

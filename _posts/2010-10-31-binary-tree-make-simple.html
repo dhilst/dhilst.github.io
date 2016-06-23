@@ -1,0 +1,14 @@
+---
+layout: post
+title: Binary Tree made simple
+date: '2010-10-31T19:58:00.000-07:00'
+author: Daniel Hilst
+tags:
+- c
+- binary tree
+modified_time: '2011-11-11T14:40:30.730-08:00'
+blogger_id: tag:blogger.com,1999:blog-8785437776394405849.post-8006344474511697958
+blogger_orig_url: http://gkos-hw.blogspot.com/2010/10/binary-tree-make-simple.html
+---
+
+<pre class="brush: c">#include &lt;stdio.h&gt;<br />#include &lt;stdlib.h&gt;<br />#include &lt;string.h&gt;<br /><br /><br />struct bt {<br />    void *data;<br />    char *key;<br />    struct bt *right, *left;<br />};<br /><br />/* prototypes */<br />int add_btnode (struct bt **, char *, void *);<br />void init_bt (struct bt **);<br />struct bt *search_btnode (struct bt *, char *);<br />void print_inorder (struct bt *);<br /><br />int<br />main (void)<br />{<br />    struct bt *root, *p;<br />    init_bt (&root);<br />    add_btnode (&root, "Daniel", "C");<br />    add_btnode (&root, "Bia", "asm");<br />    add_btnode (&root, "Nelson", "Php");<br />    p = search_btnode (root, "Bia");<br />    printf ("Bia is an %s hacker\n", (char *)p-&gt;data);<br />    puts ("\n\nIN ORDER");<br />    print_inorder (root);<br />     <br />    return 0;<br />}<br /><br />void<br />init_bt (struct bt **r)<br />{<br />    *r = NULL;<br />}<br /><br />int<br />add_btnode (struct bt **root, char *k, void *dat)<br />{<br />    if (!*root) {<br />        *root = malloc (sizeof (struct bt));<br />        if (!*root) exit (EXIT_FAILURE);<br />        (*root)-&gt;key = k;<br />        (*root)-&gt;data = dat;<br />        (*root)-&gt;right = (*root)-&gt;left = NULL;<br />        return 0;<br />    }    <br />    if (strcmp (k, (*root)-&gt;key) &gt; 0)<br />        add_btnode (&(*root)-&gt;right, k, dat);<br />    else if (strcmp (k, (*root)-&gt;key) &lt; 0)<br />        add_btnode (&(*root)-&gt;left, k, dat);<br />    return -1;<br />} <br /><br />struct bt *<br />search_btnode (struct bt *root, char *k)<br />{<br />    int rval;<br />    if (!root) return NULL;<br />    rval = strcmp (k, root-&gt;key);<br />    while (root && rval) {<br />        if (rval &gt; 0) root = root-&gt;right;<br />        else root = root-&gt;left;<br />        rval = strcmp (k, root-&gt;key);<br />    }<br />    return root;<br />}<br /><br />void<br />print_inorder (struct bt *root)<br />{<br />    if (!root) return;    <br />        <br />    print_inorder (root-&gt;left);<br />    printf ("%s =&gt; %s\n", root-&gt;key, (char *)root-&gt;data);<br />    print_inorder (root-&gt;right);<br />}<br /><br /></pre><br />Tested at: <a href="http://ideone.com/vL1N0">http://ideone.com/vL1N0</a>

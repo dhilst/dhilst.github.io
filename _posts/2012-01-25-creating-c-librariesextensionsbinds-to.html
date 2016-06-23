@@ -1,0 +1,18 @@
+---
+layout: post
+title: Creating C libraries/extensions/binds to Lua
+date: '2012-01-25T15:09:00.000-08:00'
+author: Daniel Hilst
+tags:
+- awesome
+- lua C api
+- lua hello world
+- c
+- lua binds
+- lua
+modified_time: '2012-01-25T15:10:08.802-08:00'
+blogger_id: tag:blogger.com,1999:blog-8785437776394405849.post-2277973014738409925
+blogger_orig_url: http://gkos-hw.blogspot.com/2012/01/creating-c-librariesextensionsbinds-to.html
+---
+
+I'm training the C API of lua.. planning to create extensions to awesome window manager (the one I use) -&gt; <a href="http://awesome.naquadah.org/">http://awesome.naquadah.org/</a>. Here is a "Lua calling C" hello world.<br /><br /><br /><pre class="brush:c">/*<br /> * File: hellolib.c<br /> *<br /> * Compile: <br /> * gcc -Wall -fPIC -c hellolib.c &amp;&amp; gcc -shared -Wl -o libhellolib.so hellolib.o<br /> *<br /> * Calling from lua:<br /> *<br /> * &gt; hello_lib = package.loadlib("/home/geckos/programming/lua/libhellolib.so", "lua_open_hellolib")()<br /> * &gt; <br /> * &gt; <br /> * &gt; hello_lib.hello_from_c()<br /> * Hello from C world to lua<br /> * &gt; <br /> */<br />#include &lt;stdio.h&gt;<br />#include &lt;stdlib.h&gt;<br />#include &lt;string.h&gt;<br />#include &lt;lua.h&gt;<br />#include &lt;lualib.h&gt;<br />#include &lt;lauxlib.h&gt;<br /><br /><br />static int hello_from_c(lua_State *L)<br />{<br /> puts("Hello from C world to lua");<br /> return 0;<br />}<br /><br />static const struct luaL_reg hello_lib[] = {<br /> { "hello_from_c", hello_from_c },<br /> { NULL, NULL },<br />};<br /><br />int lua_open_hellolib(lua_State *L)<br />{<br /> luaL_openlib(L, "hello_lib", hello_lib, 0);<br /> return 1;<br />}<br /><br /><br /></pre>

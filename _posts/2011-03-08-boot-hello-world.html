@@ -1,0 +1,15 @@
+---
+layout: post
+title: Boot hello world
+date: '2011-03-08T14:50:00.000-08:00'
+author: Daniel Hilst
+tags:
+- assembly
+- boot
+modified_time: '2011-11-11T14:39:22.197-08:00'
+thumbnail: https://lh3.googleusercontent.com/-aOIRkL1ZGRM/TXayHdqDSLI/AAAAAAAAAHs/jnlQHj99Fow/s72-c/boot-hello-world.png
+blogger_id: tag:blogger.com,1999:blog-8785437776394405849.post-6357589033793473719
+blogger_orig_url: http://gkos-hw.blogspot.com/2011/03/boot-hello-world.html
+---
+
+<pre class="brush: asm">; Tell the compiler that this is the 0 address<br />[ORG 0] <br />    jmp 07C0h:start   ; Jump to start<br /><br />    msg db "Hello boot world ", 2, 0 ; My string<br />         ; the 2 byte should provide some fun<br /><br />start: <br /><br />    ; Setting up the segment registers<br />    <br />    mov ax, cs<br />    mov ds, ax<br />    mov es, ax<br />    <br />    <br />    ; Writing the string <br /><br />    mov si, msg<br />print:    lodsb<br />    cmp al, 0<br />    je hang<br />    mov ah, 0Eh<br />    mov bx, 7<br />    int 010h    ; BIOS video service interrupt<br />    <br />    jmp print<br />    <br /><br />hang:     <br />    jmp hang<br /><br /><br />    times 510-($-$$) db 0<br />    dw 0AA55h<br /><br /></pre>.<br /><br />I saw this <a href="http://organicdesign.co.nz/Writing_a_boot_loader_in_assembler">here</a>, so is not my merit..<br /><br />to run:<br />copy this to a .asm file, e.g. b.asm, then assemble it with<br />$ nasm -o b.bin b.asm<br />and finaly write it to some pendrive with<br />dd if=b.bin of=/dev/YOURPENDRIVE<br />e.g $ dd if=b.bin of=/dev/sdc<br />Boot the pendrive and you should get a funny message on screen =)<br />if you have qemu installed you can boot directly the binary<br />$ qemu -hda b.bin<br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="https://lh3.googleusercontent.com/-aOIRkL1ZGRM/TXayHdqDSLI/AAAAAAAAAHs/jnlQHj99Fow/s1600/boot-hello-world.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="375" src="https://lh3.googleusercontent.com/-aOIRkL1ZGRM/TXayHdqDSLI/AAAAAAAAAHs/jnlQHj99Fow/s640/boot-hello-world.png" width="640" /></a></div>

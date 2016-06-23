@@ -1,0 +1,15 @@
+---
+layout: post
+title: My first elisp function
+date: '2012-03-19T20:57:00.000-07:00'
+author: Daniel Hilst
+tags:
+- emacs
+- HTML
+- elisp
+modified_time: '2012-03-19T20:57:01.652-07:00'
+blogger_id: tag:blogger.com,1999:blog-8785437776394405849.post-2440273025754538926
+blogger_orig_url: http://gkos-hw.blogspot.com/2012/03/my-first-elisp-function.html
+---
+
+<pre class="brush:plain">;; This is my first elisp function, it helps me to write functions<br />;; that surround text by HTML tags.<br />(defun surround-by-tag (begin end topen tclose)<br />  "Surround selected text by HTML tags"<br />  (goto-char begin)<br />  (insert topen)<br />  (goto-char (+ end (length topen)))<br />  (insert tclose))<br /><br /><br />;; Here is how to use it. I define a function and calls<br />;; surround-by-tag passing the begin and end of my selection<br />;; as the open and close tags. <br />(defun p (b e)<br />  "Surround text by &lt;p&gt;&lt;/p&gt;"<br />  (interactive "r")<br />  (surround-by-tag b e "&lt;p&gt;" "&lt;/p&gt;"))<br /><br />(defun pre (b e)<br />  "Surround text by &lt;pre&gt;&lt;/pre&gt;"<br />  (interactive "r")<br />  (surround-by-tag b e "&lt;pre&gt;" "&lt;/pre&gt;"))<br /><br /><br />;; Then I select my text and use the defined interactive function<br />;; &lt;p&gt;Hello elisp world&lt;/p&gt;</pre>

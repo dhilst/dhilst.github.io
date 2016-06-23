@@ -1,0 +1,12 @@
+---
+layout: post
+title: 
+date: '2009-10-28T19:39:00.000-07:00'
+author: Daniel Hilst
+tags: 
+modified_time: '2009-10-28T21:12:04.533-07:00'
+blogger_id: tag:blogger.com,1999:blog-8785437776394405849.post-3720236262278900383
+blogger_orig_url: http://gkos-hw.blogspot.com/2009/10/include-96-s-123-p-s-32-else-p-s-p-s-p.html
+---
+
+up.c<br /><pre name="code" class="Cpp"><br />#include &lt;stdio.h&gt;<br /><br />char *up(const char *);<br /><br />int main(){<br /> const char *string;<br /> string = "hello world";<br /> printf("%s", up(string));<br /> return(0);<br />}<br /><br />char *up(const char *s){<br /> char *p, *start;<br /> void *malloc();<br /> start = p = (char *)malloc(sizeof s);<br /> while(*s != 0){<br />  if(*s > 96 && *s < 123)<br />   *p = *s - 32;<br />  else<br />   *p = *s;<br />  p++; s++;<br /> }<br /> *++p = 0; /* end *p */<br /> p = start;<br /> return(p);<br />}<br /> <br /><br /></pre><br /><br />output:<br />HELLO WORLD

@@ -1,0 +1,20 @@
+---
+layout: post
+title: Resolving names and IPs
+date: '2012-07-03T06:41:00.000-07:00'
+author: Daniel Hilst
+tags:
+- resolv.conf
+- DNS
+- getaddrinfo
+- getnameinfo
+- linux
+- c
+- IP
+- Resove
+modified_time: '2012-07-03T06:41:54.570-07:00'
+blogger_id: tag:blogger.com,1999:blog-8785437776394405849.post-8272996407861323618
+blogger_orig_url: http://gkos-hw.blogspot.com/2012/07/resolving-names-and-ips.html
+---
+
+Here is two examples of name resolving in linux.. I use getaddrinfo() and getnameinfo() respectively..<br /><br /><br />getaddrinfo: given a name retuns all translated IPs, one per line <br /><pre class="brush:c">/*<br /> * File: getaddrinfo.c<br /> * Compile: gcc getaddrinfo.c -o getaddrinfo<br /> * Usage: ./getaddrinfo FQN<br /> */<br />#include &lt;stdio.h&gt;<br />#include &lt;stdlib.h&gt;<br />#include &lt;string.h&gt;<br />#include &lt;sys/types.h&gt;<br />#include &lt;sys/socket.h&gt;<br />#include &lt;netdb.h&gt;<br />#include &lt;netinet/in.h&gt;<br />#include &lt;arpa/inet.h&gt;<br /><br />int main(int argc, char **argv)<br />{<br />        int error;<br /><br />        struct addrinfo saddr, *psaddr, *ptr;<br /><br />        memset(&amp;saddr, '\0', sizeof(saddr));<br />        saddr.ai_family = AF_INET;<br /><br /><br />        saddr.ai_socktype = SOCK_STREAM;<br /><br />        error = getaddrinfo(argv[1], NULL, &amp;saddr, &amp;psaddr);<br />        if (error) {<br />                fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(error));<br />                exit(EXIT_FAILURE);<br />        }<br /><br />        for (ptr = psaddr; ptr; ptr = ptr-&gt;ai_next) {<br />                puts(inet_ntoa(((struct sockaddr_in *)    <br />                               ptr-&gt;ai_addr)-&gt;sin_addr));<br />        }<br /><br />        return 0;<br />}<br /></pre><br />getnameinfo: Given an IP returns the name that first resolves to it.&nbsp; <br /><pre class="brush:c">/*<br /> * File: getnameinfo.c<br /> * Compile: gcc getnameinfo.c -o getnameinfo<br /> * Usage: ./getnameinfo IP<br /> */<br />#include &lt;stdio.h&gt;<br />#include &lt;stdlib.h&gt;<br />#include &lt;string.h&gt;<br />#include &lt;sys/types.h&gt;<br />#include &lt;sys/socket.h&gt;<br />#include &lt;netdb.h&gt;<br />#include &lt;netinet/in.h&gt;<br />#include &lt;arpa/inet.h&gt;<br /><br />static char hostname[255];<br /><br />int main(int argc, char **argv)<br />{<br />        int error;<br />        struct sockaddr_in saddr_in;<br /><br /><br /><br />        memset(&amp;saddr_in, '\0', sizeof(saddr_in));<br />        saddr_in.sin_family = AF_INET;<br />        error = inet_aton(argv[1], &amp;saddr_in.sin_addr);<br />        if (error == 0) {<br />                perror("inet_aton");<br />                exit(EXIT_FAILURE);<br />        }<br /><br />        error = getnameinfo((struct sockaddr *)&amp;saddr_in, sizeof(saddr_in),<br />                            hostname, sizeof(hostname),<br />                            NULL, 0, NI_NAMEREQD);<br />        if (error) {<br />                fprintf(stderr, "getnameinfo: %s\n", gai_strerror(error));<br />                exit(EXIT_FAILURE);<br />        }<br /><br />        puts(hostname);<br />        return 0;<br />}<br /><br /></pre><br />Cheers

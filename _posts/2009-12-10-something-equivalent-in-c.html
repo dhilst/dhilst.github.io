@@ -1,0 +1,12 @@
+---
+layout: post
+title: Something equivalent in C
+date: '2009-12-10T11:16:00.000-08:00'
+author: Daniel Hilst
+tags: 
+modified_time: '2009-12-10T11:31:25.513-08:00'
+blogger_id: tag:blogger.com,1999:blog-8785437776394405849.post-5147705657303905574
+blogger_orig_url: http://gkos-hw.blogspot.com/2009/12/something-equivalent-in-c.html
+---
+
+<pre class="brush: cpp">#include &lt;stdio.h&gt;<br /><br />struct strc<br />{<br />  int a, b, c;<br />} ints = {<br />  0x6c6c6548,<br />  0x6f57206f,<br />  0x0a646c72,<br />};<br /><br />int <br />main (void)<br />{<br /> write (1, &ints, 12);<br /> return 0;<br />}<br /><br /></pre>

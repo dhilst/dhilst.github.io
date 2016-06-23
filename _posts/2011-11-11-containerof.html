@@ -1,0 +1,16 @@
+---
+layout: post
+title: container_of
+date: '2011-11-11T08:49:00.000-08:00'
+author: Daniel Hilst
+tags:
+- linux
+- c
+- kernel
+- container_of
+modified_time: '2011-11-11T14:36:03.479-08:00'
+blogger_id: tag:blogger.com,1999:blog-8785437776394405849.post-5746720082900012207
+blogger_orig_url: http://gkos-hw.blogspot.com/2011/11/containerof.html
+---
+
+<pre class='brush: c'><br />/*<br /> * This example show how get sibling members of a struct. Suppose that you<br /> * have a struct foo with members A and B. With the macros provided here you can<br /> * get the address of B, having a pointer to A and knowing that B is the B member<br /> * of struct foo. This is not my work, is just based on macros provided by gcc<br /> * compiler __builtin_offsetof() and the container_of() macro found on linux<br /> * kernel sources. <br /> */ <br />#include &lt;stdio.h&gt; <br /><br />/*<br /> * You can get the offset of a member on a struct by dereferencing that member on<br /> * address 0 of such structure.<br /> */<br />#define offset_of(type, member) ((unsigned long) &((type *)0)-&gt;member)<br /><br />/*<br /> * With the capability to get offsets, is possible to get the address of the<br /> * struct that contains some data. We just need a pointer to that data and the<br /> * offset of that data on the struct. With this informations we can calculate<br /> * the address of struct by subtracting the offset from the pointer to that data<br /> * contained on struct. In the macro above the @ptr is the data contained on<br /> * struct.<br /> */<br />#define container_of(ptr, type, member) \<br />        ((type *) ((char *)ptr - offset_of(type, member)))<br /><br />struct foo {<br />        char *str;<br />        int len;<br />};<br /><br />void print_sibling(int *ip);<br /><br />int main(void)<br />{<br />        struct foo bar = {<br />                .str = "Hello World",<br />                .len= 11,<br />        }; <br />        print_sibling(&bar.len);<br />        <br />        return 0;<br /><br />}<br /><br />/*<br /> * This function receives an int pointer (@ip) that is known to be the member "len" of<br /> * a "struct foo". With such information we can do the magic and take any<br /> * "sibling" member of that struct.<br /> */<br />void print_sibling(int *ip)<br />{<br />        struct foo *tmp = container_of(ip, struct foo, len);<br />        puts(tmp-&gt;str);<br />}<br /><br /><br /></pre>
