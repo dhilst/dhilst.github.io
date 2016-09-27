@@ -74,7 +74,7 @@ it soon but first we need to create a header for our library. This
 header is created by javah tool. This tool is called against a compiled
 class. This is why we compile our class before going furter to native
 code. The header can be generated with this command:
-```javah HelloJNIWorld```
+{% highlight text %}javah HelloJNIWorld{% endhighlight %}
 
 This command will generate the HelloJNIWorld.h header file. This header will look
 like this:
@@ -133,11 +133,13 @@ here I can found it at /etc/alternatives/java_sdk. I will declare JAVA_HOME to
 point there. This can be done like this ```export
 JAVA_HOME=/etc/alternatives/java_sdk```. After this compiling is a simple
 matter of:
-```cc -I${JAVA_HOME}/include -I${JAVA_HOME}/include/linux -fPIC -shared -o libhellonativeworld.so libhellonativeworld.c```.
+{% highlight text %}
+cc -I${JAVA_HOME}/include -I${JAVA_HOME}/include/linux -fPIC -shared -o libhellonativeworld.so libhellonativeworld.c
+{% endhighlight %}
 
 
 Now we have everything we need. Let's try to run our native code:
-```
+{% highlight text %}
 $ java HelloJNIWorld
 Exception in thread "main" java.lang.UnsatisfiedLinkError: no hellonativeworld in java.library.path
 	at java.lang.ClassLoader.loadLibrary(ClassLoader.java:1867)
@@ -145,21 +147,22 @@ Exception in thread "main" java.lang.UnsatisfiedLinkError: no hellonativeworld i
 	at java.lang.System.loadLibrary(System.java:1122)
 	at HelloJNIWorld.<clinit>(HelloJNIWorld.java:3)
 $ 
-```
+{% endhighlight %}
 
 Why this error again!? Well there is one little step missing. We have
 libhellonativeworld.so but java can't find it. There is a bunch of ways to do
 this. You can move that library to some standard folder like /usr/lib. You can
 declare LD_LIBRARY_PATH to the folder where it resides, or you can use
 java.library.path property at command line. Let's try the last:
-```
+{% highlight text %}
 $ java -Djava.library.path=. HelloJNIWorld
 Hello native world
-```
+{% endhighlight %}
 
 There you go. Last but not least. Doing all that commands by hand can be tedious so let's create
 a Makefile to hold all that mess. It'll look like this:
-```
+
+{% highlight text %}
 JAVA_HOME ?= /etc/alternatives/java_sdk
 CFLAGS += -I$(JAVA_HOME)/include -I$(JAVA_HOME)/include/linux
 
@@ -179,10 +182,9 @@ HelloJNIWorld.class: HelloJNIWorld.java
 
 %.class: %.java
 	javac -cp . $<
- 
-```
+{% endhighlight %}
 
-Pretty crypt don't? These are called "pattern rules" and are topic for another
+Pretty crypt doesn't? These are called "pattern rules" and are topic for another
 post. I hope that this post help you to have an "in mind" road map about how
 native code is handled by Java. Everything you need to know can be found at
 [documentation](http://docs.oracle.com/javase/7/docs/technotes/guides/jni/spec/jniTOC.html). All the code can be found at [here](https://gist.github.com/gkos/531e2e967374d585cbd17f12c1684775)
