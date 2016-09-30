@@ -11,12 +11,14 @@ gtk2-devel. Our program will have only one button. When the button is pressed
 the "Hello world!!!" message is printed to the console.
 
 The first thing to do is include the gtk header as below:
+
 ```c
 #include <gtk/gtk.h>
 ```
 
 Next we do define the callback invoked when the button is pressed. The registration
 goes next, in the our `main()` :)
+
 ```c
 static void button_callback(GtkButton *button, gpointer user_data)
 {
@@ -90,6 +92,8 @@ gcc -Wall -o gtk-button-helloworld gtk-button-helloworld.c $(pkg-config --libs -
 
 And here is a screenshot of the program running:
 ![gtk-button-helloworld]({{ site.url }}/assets/gtk-button-helloworld.png)
+
+The whole code can be found [here](https://gist.github.com/gkos/bea3bbb31d0debb093916066d6a68e73)
 
 That's it!
 Cheers!!!
