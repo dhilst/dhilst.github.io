@@ -188,4 +188,39 @@ is subject for another post.
 
 The code can be found [here](https://gist.github.com/gkos/b29d6703d8bbc0e5b626ba56e23a0838)
 
+If you are running Java 8 you can replace the interface instantiation
+by a lamda expression. In this case only the call to the `nativeCallJavaMethod`
+changes:
+
+``` java
+		/* Passing code as argument */
+		nativeCallJavaMethod(() -> System.out.println("Hello from CallbackInterface"));
+```
+
+But, if you are using Java 8 and already have a method implemented you can
+pass it as method reference. To exemplify I will post the whole code.
+
+``` java
+interface CallbackInterface {
+	public void callback();
+}
+
+public class Callback {
+
+	static native void nativeCallJavaMethod(CallbackInterface cb);
+
+	public void callback() {
+		System.out.println("Hello from method reference");
+	}
+
+	public static void main(String []args) {
+		System.loadLibrary("callback");
+		Callback c = new Callback();
+
+		nativeCallJavaMethod(c::callback);
+	}
+}
+
+```
+
 Cheers!
