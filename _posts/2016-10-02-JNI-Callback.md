@@ -46,7 +46,7 @@ JNIEXPORT void JNICALL Java_Callback_nativeCallJavaMethod
 
 As you can see, to call a static method from native code we need
 the method ID and the class. To retrieve method ID you should
-use the `GetStaticMethodID` or `GetMethodID` for static an instance
+use the `GetStaticMethodID` or `GetMethodID` for static and instance
 methods respectively. That function receives four arguments being
 the last the most crypt. The last parameter is the signature of the
 method. In Java you can have multiple methods with the same name
@@ -172,7 +172,13 @@ JNIEXPORT void JNICALL Java_Callback_nativeCallJavaMethod
 ```
 
 We first grab the class of the object being passed, then use that class to get
-the method id and finaly is this one to call the implemented method. Easy :+1:
+the method id and finaly is this one to call the implemented method. The output
+should be:
+
+```
+$ java -Djava.library.path=. Callback
+Hello from CallbackInterface
+```
 
 You may notice that `if (!...)` statements. There I'm checking if the prior
 call have failed and if this is the case I silently return. This is possible
@@ -182,5 +188,4 @@ is subject for another post.
 
 The code can be found [here](https://gist.github.com/gkos/b29d6703d8bbc0e5b626ba56e23a0838)
 
-Regards!
-
+Cheers!
