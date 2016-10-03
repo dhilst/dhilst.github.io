@@ -197,30 +197,50 @@ changes:
 		nativeCallJavaMethod(() -> System.out.println("Hello from CallbackInterface"));
 ```
 
-But, if you are using Java 8 and already have a method implemented you can
-pass it as method reference. To exemplify I will post the whole code.
+But, if you are using Java 8 you may want to take avantage of `java.util.function` package
+that declare lots of types of interfaces to be used with method references. Because of
+this I'm posting a last example using that package. Take a look
 
 ``` java
-interface CallbackInterface {
-	public void callback();
-}
+import java.util.function.Consumer;
 
 public class Callback {
 
-	static native void nativeCallJavaMethod(CallbackInterface cb);
-
-	public void callback() {
-		System.out.println("Hello from method reference");
-	}
+	static native void nativeCallJavaMethod(Consumer<String> s, String msg);
 
 	public static void main(String []args) {
 		System.loadLibrary("callback");
-		Callback c = new Callback();
-
-		nativeCallJavaMethod(c::callback);
+		nativeCallJavaMethod(System.out::println, "Hello World!");
 	}
 }
-
 ```
 
-Cheers!
+``` c
+#include "Callback.h"
+
+JNIEXPORT void JNICALL Java_Callback_nativeCallJavaMethod
+(JNIEnv *env, jclass cls, jobject impl_obj, jstring msg) 
+{
+	jclass impl_cls;
+	jmethodID impl_cb_mid;
+
+	impl_cls = (*env)->GetObjectClass(env, impl_obj);
+	if (!impl_cls)
+		return;
+	
+	impl_cb_mid = (*env)->GetMethodID(env, impl_cls, "accept", "(Ljava/lang/Object;)V"); 
+	if (!impl_cb_mid)
+		return;
+
+	(*env)->CallVoidMethod(env, impl_obj, impl_cb_mid, msg);
+}
+```
+
+This time we have used an inteface provided by Java infrastructure. This should safe you
+from duplicating code and creating a log of functional interfaces. This also make the
+native code better since no custom interface (which are candidate to changes) is being
+used.
+
+
+Thats it!
+Regards!
