@@ -236,11 +236,10 @@ JNIEXPORT void JNICALL Java_Callback_nativeCallJavaMethod
 }
 ```
 
-This time we have used an inteface provided by Java infrastructure. This should safe you
-from duplicating code and creating a log of functional interfaces. This also make the
-native code better since no custom interface (which are candidate to changes) is being
-used.
-
+This time we have used an inteface provided by Java infrastructure. This should
+save you from duplicating code and creating a lot of interfaces. This also make
+the native code better since no custom interface (which are candidate to
+changes) is being used.
 
 Thats it!
 Regards!
