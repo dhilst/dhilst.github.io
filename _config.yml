@@ -16,3 +16,6 @@ github_username: gkos
 
 # Build settings
 markdown: kramdown
+
+gems:
+        - jekyll-gist
