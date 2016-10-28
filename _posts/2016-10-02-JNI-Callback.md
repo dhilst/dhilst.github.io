@@ -1,6 +1,7 @@
 ---
 layout: post
 title: JNI Callback
+category: JNI
 tags: JNI, java, c, linux
 ---
 

@@ -1,8 +1,8 @@
 ---
 layout: post
 title:  Gtk Hello World
-categories: programming, c, gtk
-tags: java, JNI, c, linux, programming
+category: gtk
+tags: c, linux, programming, gtk
 ---
 # GTK (2.0) Hello World
 Hi to everybody. At this post I will show a hello world program using gtk+-2.0.

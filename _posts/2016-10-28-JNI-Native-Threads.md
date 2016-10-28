@@ -1,7 +1,7 @@
 ---
 layout: post
 title: JNI Native Threads
-cateogories: programming, java, JNI, c
+category: JNI
 tags: java, JNI, c, linux, programming
 ---
 
@@ -35,8 +35,8 @@ So now we have a full picture.
 The details can be grasped from the example code above. The comments
 provides further guidance. Take a look:
 
-{% gist https://gist.github.com/gkos/31cc7d04bbe3659beeb9321309e77db2 JNIThread.java %}
-{% gist https://gist.github.com/gkos/31cc7d04bbe3659beeb9321309e77db2 libjnithread.c %}
-{% gist https://gist.github.com/gkos/31cc7d04bbe3659beeb9321309e77db2 Makefile %}
+{% gist 31cc7d04bbe3659beeb9321309e77db2 JNIThread.java %}
+{% gist 31cc7d04bbe3659beeb9321309e77db2 libjnithread.c %}
+{% gist 31cc7d04bbe3659beeb9321309e77db2 Makefile %}
 
 Cheers :+1:

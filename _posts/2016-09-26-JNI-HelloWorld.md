@@ -2,7 +2,7 @@
 layout: post
 title:  JNI Hello World
 date:   2016-06-20 21:32:26 -0300
-categories: programming, java, JNI, c
+category: JNI
 tags: java, JNI, c, linux, programming
 ---
 Hi every body. This is my first post. I hope you guys like. In this

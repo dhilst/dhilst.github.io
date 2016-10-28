@@ -1,6 +1,6 @@
 ---
 title: How to make bash wrap long lines
-categories: linux
+categories: bash 
 layout: post
 tags: bash, shell
 ---
