@@ -33,13 +33,13 @@ cd EFI\BOOT
 fallback.efi
 ```
 
-This little 3 commands had samed my day. This little savior
+This little 3 commands had saved my day. This little savior
 will search for `BOOT.CSV` file recovering what was damaged.
 After that the Fedora's boot entry appears again at BIOS
 (which is not BIOS anymore), and I have just to setup the
 right order.
 
-I found this at this page: https://fedoraproject.org/wiki/GRUB_2
+I found this at this page: [https://fedoraproject.org/wiki/GRUB_2](https://fedoraproject.org/wiki/GRUB_2)
 
 Thank you internet for being a so good resource for troubleshooting!!!
 
