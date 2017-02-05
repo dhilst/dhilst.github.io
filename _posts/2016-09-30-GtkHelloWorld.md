@@ -4,7 +4,6 @@ title:  Gtk Hello World
 category: gtk
 tags: c, linux, programming, gtk
 ---
-# GTK (2.0) Hello World
 Hi to everybody. At this post I will show a hello world program using gtk+-2.0.
 You must have gtk+-2.0 headers installed. At Fedora I had to install
 gtk2-devel. Our program will have only one button. When the button is pressed
