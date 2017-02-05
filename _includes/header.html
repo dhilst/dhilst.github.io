@@ -1,34 +1,33 @@
 <header>
-  <nav class="navbar navbar-default">
-    <div class="container">
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#site-navbar-collapse" aria-expanded="false">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="{{ site.url }}">Home</a>
-      </div>
-      <div class="collapse navbar-collapse" id="site-navbar-collapse">
-        <ul class="nav navbar-nav navbar-right">
-            {% for my_page in site.pages %}
-              {% if my_page.title == 'Categories' %}
-              <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown">Categories <span class="caret"></span></a>
-                <ul class="dropdown-menu">
-                  {% for cat in site.categories %}
-                  {% capture cat_name %}{{ cat | first }}{% endcapture %}
-                    <li><a href="{{ site.url }}/categories/#{{ cat_name | slugize }}">{{ cat_name }}</a></li>
-                  {% endfor %}
-                </ul>
-              </li>
-            {% else %}
-            <li><a href="{{ my_page.url | prepend: site.baseurl }}">{{ my_page.title }}</a></li>
-            {% endif %}
+  <div class="site-header"></div>
+  <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#site-navbar-collapse" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="{{ site.url }}">Home</a>
+    </div>
+    <div class="collapse navbar-collapse" id="site-navbar-collapse">
+      <ul class="nav navbar-nav navbar-right">
+        {% for my_page in site.pages %}
+        {% if my_page.title == 'Categories' %}
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown">Categories <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            {% for cat in site.categories %}
+            {% capture cat_name %}{{ cat | first }}{% endcapture %}
+            <li><a href="{{ site.url }}/categories/#{{ cat_name | slugize }}">{{ cat_name }}</a></li>
             {% endfor %}
-        </ul>
-      </div>
+          </ul>
+        </li>
+        {% else %}
+        <li><a href="{{ my_page.url | prepend: site.baseurl }}">{{ my_page.title }}</a></li>
+        {% endif %}
+        {% endfor %}
+      </ul>
     </div>
   </nav>
 </header>
