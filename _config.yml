@@ -11,7 +11,7 @@ email: danielhilst@gmail.com
 description: > # this means to ignore newlines until "baseurl:"
   Personal blog about programming and linux.
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "http://gkos.github.io" # the base hostname & protocol for your site
+url: "http://gkos.github.com" # the base hostname & protocol for your site
 github_username: gkos
 
 # Build settings
