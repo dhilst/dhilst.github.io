@@ -19,7 +19,7 @@
                 <ul class="dropdown-menu">
                   {% for cat in site.categories %}
                   {% capture cat_name %}{{ cat | first }}{% endcapture %}
-                    <li><a href="categories/#{{ cat_name | slugize }}">{{ cat_name }}</a></li>
+                    <li><a href="{{ site.url }}/categories/#{{ cat_name | slugize }}">{{ cat_name }}</a></li>
                   {% endfor %}
                 </ul>
               </li>
