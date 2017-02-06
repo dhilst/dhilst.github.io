@@ -1,15 +1,30 @@
 ---
 ---
 
+$medium-break: 767px
 $background-image-heigth: 300px
+
 
 .site-header
   background-image: url(http://gkos.github.com/assets/header.jpg)
   background-size: cover
   background-position: right bottom
+  @media (max-width: #{$medium-break})
+    background-position: left bottom
+    h1
+      text-align: center
   width: 100%
   min-height: $background-image-heigth
 
+  h1
+    padding: 100px
+    font-size: 3em
+    @media (max-width: #{$medium-break})
+      font-size: 2em
+      padding: 100px 20px
+    font-family: serif
+    font-style: italic
+   
 
 footer [class*=col-]
   margin: 6px
