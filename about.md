@@ -4,7 +4,9 @@ title: About
 permalink: /about/
 ---
 
-This is a personal blog about linux and programing. Here you will find
+Hi! My name first name is Daniel but most people call me by my second name: Hilst.
+
+This is my personal blog about linux and programing. Here you will find
 guide, curiosities, tips and much more about programming in Linux environments.
 My challenges, thougts and cheat sheet are all posted here for latter references.
 
