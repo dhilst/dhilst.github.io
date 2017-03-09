@@ -1,34 +1,48 @@
 ---
 ---
 
-$medium-break: 767px
-$background-image-heigth: 300px
+*
+  margin: 0
+  padding: 0
+  box-sizing: border-box
 
+h1, h2, h3
+  font-family: serif
+
+body
+  font-family: sans-serif
 
 .site-header
-  background-image: url(http://gkos.github.com/assets/header.jpg)
-  background-size: cover
-  background-position: right bottom
-  @media (max-width: #{$medium-break})
-    background-position: left bottom
-    h1
-      text-align: center
-  width: 100%
-  min-height: $background-image-heigth
-
   h1
-    padding: 100px
-    font-size: 3em
-    @media (max-width: #{$medium-break})
-      font-size: 2em
-      padding: 100px 20px
     font-family: serif
+    font-size: 72px
+    font-weight: 900
+
+  small
+    font-style: sans-serif
     font-style: italic
+
+$min-footer-height: 40px
+
+footer div[class*="col-"]
+  min-height: $min-footer-height
+
+.footer-column-right
+  float: right
+  text-align: right
+  position: relative
+  padding-left: 0px
+  padding-right: 0px
+
+.copyright
+  position: absolute
+  bottom: 0
+  right: 0
+  margin-right: 16px
+  font-family: serif
+  font-size: 11px
+  font-style: italic
+  font-weight: 100
    
 
-footer [class*=col-]
-  margin: 6px
-  min-height: 100%
-  display: flex
-  items-align: center 
 // vim: set ts=2:sw=2:sts=2:et:
