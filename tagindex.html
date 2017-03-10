@@ -1,0 +1,15 @@
+---
+---
+<script src='/assest/js/post.js'></script>
+<script type='text/javascript'>
+  var posts = [
+    {% for post in site.posts %}
+      new Post({
+        title:  "{{ post.title | replace: '"','\\"'}}", 
+        date: {{ post.date | date: '%s'}},
+        url: "{{ post.url }}",
+        id: "{{ post.id }}",
+        tags: [{% for tag in post.tags %}"{{ tag }}", {% endfor %}],
+        path: "{{ post.path }}"}), {% endfor %}
+  ];
+</script>
