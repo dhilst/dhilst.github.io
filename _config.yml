@@ -6,13 +6,12 @@
 # 'jekyll serve'. If you change this file, please restart the server process.
 
 # Site settings
-title: Gecko's World
+title: D. Hilst's blog.
 email: danielhilst@gmail.com
-description: > # this means to ignore newlines until "baseurl:"
-  Personal blog about programming and linux.
+description: A humble online knowledge base.
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "http://gkos.github.com" # the base hostname & protocol for your site
-github_username: gkos
+url: "http://dhilst.github.com" # the base hostname & protocol for your site
+github_username: dhilst 
 
 # Build settings
 markdown: kramdown
