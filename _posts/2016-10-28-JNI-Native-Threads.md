@@ -1,8 +1,7 @@
 ---
 layout: post
 title: JNI Native Threads
-category: JNI
-tags: java, JNI, c, linux, programming
+tags: [java, JNI, c]
 ---
 
 Hey everybody!

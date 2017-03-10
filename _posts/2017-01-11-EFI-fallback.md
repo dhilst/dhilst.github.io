@@ -1,6 +1,7 @@
 ---
 layout: post
 title: EFI boot fallback
+tags: [linux, EFI, boot, recovery]
 ---
 
 On tuesday I arrive at my home, talk to my wife and after

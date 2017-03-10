@@ -4,8 +4,13 @@ layout: default
 <article  itemscope itemtype="http://schema.org/BlogPosting">
 
   <header >
-    <h1  itemprop="name headline">{{ page.title }}</h1>
-    <p ><time datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">{{ page.date | date: "%b %-d, %Y" }}</time>{% if page.author %} • <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span itemprop="name">{{ page.author }}</span></span>{% endif %}</p>
+    <h2 class="post-title" itemprop="name headline">{{ page.title }}</h1>
+    <span class="post-tags-mark">&raquo;</span>
+    <p class="post-meta"><time datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">{{ page.date | date: "%b %-d, %Y" }}</time>{% if page.author %} • <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span itemprop="name">{{ page.author }}</span></span>{% endif %}</p>
+    <span class="post-tags-dash">&dash;</span>
+    {% for tag in page.tags %}
+      <small class="post-tags">{{ tag }}, </small>
+    {% endfor %}
   </header>
 
   <div  itemprop="articleBody">

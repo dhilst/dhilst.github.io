@@ -2,8 +2,7 @@
 layout: post
 title:  JNI Hello World
 date:   2016-06-20 21:32:26 -0300
-category: JNI
-tags: java, JNI, c, linux, programming
+tags: [java, JNI, c]
 ---
 Hi every body. This is my first post. I hope you guys like. In this
 first post I will show how to declare, implement, compile and call a

@@ -1,8 +1,7 @@
 ---
 title: How to make bash wrap long lines
-categories: bash 
 layout: post
-tags: bash, shell
+tags: [shell, bash, terminal]
 ---
 If you open a terminal and then maximizes the terminal window you
 may face problems where bash don't wrap long lines. This seems to

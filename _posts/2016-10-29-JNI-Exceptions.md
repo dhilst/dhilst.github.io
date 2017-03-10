@@ -1,8 +1,7 @@
 ---
 layout: post
 title: JNI Exception throwing & handling.
-category: JNI
-tags: java, JNI, c, linux, programming
+tags: [java, JNI, C++]
 ---
 
 This example show how to manage exceptions from JNI code. You'll

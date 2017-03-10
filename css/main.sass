@@ -15,6 +15,10 @@ $container-width: 720px
   @media screen and (min-width: $container-width)
     max-width: $container-width
 
+.clean-link, .clean-link:hover, .clean-link:active, .clean-link:visited, .clean-link:link
+  text-decoration: none
+  color: inherit
+
 body
   font-family: sans-serif
 
@@ -28,10 +32,6 @@ body
     font-style: sans-serif
     font-style: italic
 
-  a, a:hover, a:link, a:active, a:visited
-    text-decoration: none
-    color: inherit
-
 footer div[class*="col-"]:first-of-type
   padding-right: 0
 
@@ -43,7 +43,6 @@ footer div[class*="col-"]:last-of-type
   margin-right: 16px
   min-width: 200px
 
-
 .copyright
   position: absolute
   bottom: 0
@@ -52,17 +51,32 @@ footer div[class*="col-"]:last-of-type
   font-size: 11px
   font-style: italic
   font-weight: 100
+  opacity: .5
 
 footer div[class*="col-"]
   min-height: 40px
    
 .post-title
-  display: inline-block
+  margin-bottom: 0
 
-.post-meta
+h1.post-title
+  font-weight: 500
+
+.post-meta, .post-tags
   font-family: serif
   font-style: italic
   font-weight: 200 
   opacity: .7
+
+.post-meta
+  margin-bottom: 20px
+  margin-left: 2px
+
+.post-tags
+  font-variant: small-caps
+  text-transform: lowercase
+
+p.post-meta
+  display: inline-block
 
 // vim: set ts=2:sw=2:sts=2:et:

@@ -1,7 +1,7 @@
 ---
 title: Adding commands to Yocto's native SDK
 layout: post
-categories: yocto, linux, embedded
+tags: [yocto, embedded, linux]
 ---
 
 Sometimes you may need to add some command so that it is

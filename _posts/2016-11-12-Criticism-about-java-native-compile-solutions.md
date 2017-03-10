@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Criticism about java native compilation tools
-tags: java, jni, c, python, crosscompilation, cross compilation
+tags: [java, ant, maven, cross-compilation, JNI]
 ---
 
 I've been researching about java native compilation tools and found two

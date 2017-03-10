@@ -1,8 +1,7 @@
 ---
 layout: post
 title: JNI Callback
-category: JNI
-tags: JNI, java, c, linux
+tags: [java, JNI, c]
 ---
 
 Hi everybody. Today I'll show you how to call Java from C code
