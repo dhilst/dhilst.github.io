@@ -9,40 +9,60 @@
 h1, h2, h3
   font-family: serif
 
+$container-width: 720px
+
+.container
+  @media screen and (min-width: $container-width)
+    max-width: $container-width
+
 body
   font-family: sans-serif
 
 .site-header
   h1
     font-family: serif
-    font-size: 72px
+    font-size: 4em
     font-weight: 900
 
   small
     font-style: sans-serif
     font-style: italic
 
-$min-footer-height: 40px
+  a, a:hover, a:link, a:active, a:visited
+    text-decoration: none
+    color: inherit
 
-footer div[class*="col-"]
-  min-height: $min-footer-height
+footer div[class*="col-"]:first-of-type
+  padding-right: 0
 
-.footer-column-right
+footer div[class*="col-"]:last-of-type
   float: right
   text-align: right
   position: relative
-  padding-left: 0px
-  padding-right: 0px
+  padding: 0
+  margin-right: 16px
+  min-width: 200px
+
 
 .copyright
   position: absolute
   bottom: 0
   right: 0
-  margin-right: 16px
   font-family: serif
   font-size: 11px
   font-style: italic
   font-weight: 100
+
+footer div[class*="col-"]
+  min-height: 40px
    
+.post-title
+  display: inline-block
+
+.post-meta
+  font-family: serif
+  font-style: italic
+  font-weight: 200 
+  opacity: .7
 
 // vim: set ts=2:sw=2:sts=2:et:
