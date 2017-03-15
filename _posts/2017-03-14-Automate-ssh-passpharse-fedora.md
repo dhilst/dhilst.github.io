@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Automate ssh login in Fedora 25
-tags: [linux, ssh]
+tags: [linux, ssh, fedora]
 ---
 In this post I show how to automate the ssh login so that you
 don't need to retype the password or passphrase every time. Besides
