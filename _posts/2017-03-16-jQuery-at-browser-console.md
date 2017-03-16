@@ -7,13 +7,13 @@ tags: [javascript, oneliner]
 To load jQuery at Firefox's console copy and paste this code there: 
 
 ```
-var a = new XMLHttpRequest(); a.open('GET', 'https://code.jquery.com/jquery-3.1.1.min.js'); a.onreadystatechange = () => {eval(a.resultText);jQuery.noConflict()}; a.send();
+var a = new XMLHttpRequest(); a.open('GET', 'https://code.jquery.com/jquery-3.1.1.min.js'); a.onreadystatechange = () => eval(a.resultText); a.send();
 ```
 
-After that you can access jQuery using `jQuery` prefix:
+After that you can access jQuery using `$` prefix:
 
 ```
-jQuery.ajax('GET', {url:'http://www.google.com'});
+$.ajax('GET', {url:'http://www.google.com'});
 ```
 
 Cheers,
