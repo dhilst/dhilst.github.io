@@ -1,9 +1,19 @@
 ---
-layout:post
+layout: post
+title: Downloading SSL Certification chain using shell script.
+tags:
+  - shell
+  - openssl
+  - certificates
 ---
 
-```
-#!/bin/bash
+Use the below shell script to donwload all the certificate chain. Pass the domain to it
+and redirect output to a file.
 
-echo \x00 | openssl s_client -showcerts -connect $1:443 2>/dev/null | awk '/BEGIN/{f=1}{if(f){print $0}}/END/{f=0}'
 ```
+#!/usr/bin/env sh
+
+openssl s_client -showcerts -connect $1:443 < /dev/null 2> /dev/null | sed -n '/BEGIN CERTIFICATE/,/END CERTIFICATE/p'
+```
+
+Usage: `./download-certs.sh google.com > googlecertschain.pem`
