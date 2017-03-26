@@ -18,3 +18,12 @@ markdown: kramdown
 
 gems:
         - jekyll-gist
+        - jekyll-paginate
+
+paginate: 10
+
+exclude:
+        - Gruntfile.js
+        - jekyll.out
+        - package.json
+        - node_modules

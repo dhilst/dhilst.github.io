@@ -2,9 +2,11 @@
 layout: default
 ---
 <ul class="post-list">
-  {% for post in site.posts %}
-    {% if post.blogger != 'true'  %}
+  {% for post in paginator.posts %}
       <a class="clean-link" href="{{ post.url | prepend: site.baseurl }}">
+        {% if post.blogger %}
+          <small class="post-blogspot">(Blogspot Archive)</small>
+        {% endif %}
         <h2 class="post-title">
           {{ post.title }}
         </h2>
@@ -24,6 +26,15 @@ layout: default
         <a class="post-link read-more-link" href="{{ post.url | prepend: site.baseurl }}">Read more ... </a>
       </div>
       <hr></hr>
-    {% endif %}
   {% endfor %}
 </ul>
+<div class='text-center'>
+  <ul class='pagination'>
+    {% if paginator.previous_page %}
+    <li><a href="{{ paginator.previous_page_path }}" class="previous">&laquo;</a></li>
+    {% endif %}
+    {% if paginator.next_page %}
+    <li><a href="{{ paginator.next_page_path }}" class="next">&raquo;</a></li>
+    {% endif %}
+  </ul>
+</div>

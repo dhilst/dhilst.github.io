@@ -16,6 +16,16 @@ layout: default
   <div  itemprop="articleBody">
 		{{ content }}
 	</div>
+  <div class='text-center'>
+    <ul class='pagination'>
+      {% if page.previous.url %}
+      <li><a href="{{ page.previous.url }}" class="previous">&laquo;</a></li>
+      {% endif %}
+      {% if page.next.url %}
+      <li><a href="{{ page.next.url }}" class="next">&raquo;</a></li>
+      {% endif %}
+    </ul>
+  </div>
 	<div class="comments">
 		<div id="disqus_thread"></div>
 		<script>
