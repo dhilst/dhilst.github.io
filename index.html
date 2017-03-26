@@ -31,10 +31,10 @@ layout: default
 <div class='text-center'>
   <ul class='pagination'>
     {% if paginator.previous_page %}
-    <li><a href="{{ paginator.previous_page_path }}" class="previous">&laquo;</a></li>
+    <li><a href="{{ paginator.previous_page_path }}">&laquo;</a></li>
     {% endif %}
     {% if paginator.next_page %}
-    <li><a href="{{ paginator.next_page_path }}" class="next">&raquo;</a></li>
+    <li><a href="{{ paginator.next_page_path }}" class="previous">&raquo;</a></li>
     {% endif %}
   </ul>
 </div>
