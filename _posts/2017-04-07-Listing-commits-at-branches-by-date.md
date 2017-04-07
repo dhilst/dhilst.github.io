@@ -1,5 +1,7 @@
 ---
 layout: post
+title: Git, listing commits in remote branches order by date.
+tags: [git, shell]
 ---
 
 This may be usefull to find out what branches have been updated!

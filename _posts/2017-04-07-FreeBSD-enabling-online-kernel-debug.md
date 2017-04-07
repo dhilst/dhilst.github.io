@@ -1,7 +1,7 @@
 ---
 layout: post
-title: Online debugging on FreeBSD.
-tags: [debug, FreeBSD]
+title: FreeBSD, enabling kernel debugging.
+tags: [debug, FreeBSD, kenrel]
 ---
 
 Create a new configuration file for kernel and add `KDB` and `DDB` options to it.

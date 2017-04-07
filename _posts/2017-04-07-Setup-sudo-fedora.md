@@ -1,6 +1,6 @@
 ---
 layout: post
-title: sudo no password not working.
+title: Sudo still asking for passord.
 tags: [sudo, NOPASSWD, linux, unix]
 ---
 

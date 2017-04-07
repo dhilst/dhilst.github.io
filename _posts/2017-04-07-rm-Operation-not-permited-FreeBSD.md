@@ -1,5 +1,7 @@
 ---
 layout: post
+title: FreeBSD, `rm Operation not permitted'.
+tags: [FreeBSD]
 ---
 
 If you receice `rm: Operation not permitted` while trying to delete files on FreeBSD, check

@@ -1,10 +1,7 @@
 ---
 layout: post
-title: Downloading SSL Certification chain using shell script.
-tags:
-  - shell
-  - openssl
-  - certificates
+title: SSL, Downloading certification chain using shell script.
+tags: [shell, openssl, certificates]
 ---
 
 Use the below shell script to donwload all the certificate chain. Pass the domain to it
