@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Sudo still asking for passord.
+title: Sudo, still asking for password.
 tags: [sudo, NOPASSWD, linux, unix]
 ---
 
