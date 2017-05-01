@@ -4,4 +4,55 @@
     <small>A blog about web, programming and life ...</small>
   </a>
 </div>
+
+<div class="container">
+  <div class="row">
+    <div id="search-bar">
+      <div class="input-group stylish-input-group">
+        <input type="text" class="form-control"  placeholder="Search" >
+        <span class="input-group-addon">
+          <span class="glyphicon glyphicon-search"></span>
+        </span>
+      </div>
+    </div>
+    <div id="search-results" class="post-tags">
+    </div>
+  </div>
+</div>
+  <script src="/assets/js/lunr.js"></script>
+  <script type="text/javascript">
+'use strict';
+
+$(() => {
+
+  const $searchBar = $("#search-bar [type='text']") ; 
+  const $searchResults = $('#search-results');
+
+  $.getJSON('/posts.json', (posts) => {
+    const workingPosts = posts.filter((post) => !post.blogger);
+    const store = {};
+    workingPosts.forEach((post) => store[post.url] = post);
+    const index = lunr(function() { 
+      this.ref('url');
+      this.field('title');
+      this.field('content');
+      workingPosts.forEach((post) => this.add(post));
+    });
+    $searchBar.keyup(() => {
+      const searchText = $searchBar.val();
+      if (searchText.length > 1) {
+        const results = index.search($searchBar.val());
+        if (results.length > 0) {
+          const list = results.map((r) => '<li><span class="post-tags-mark">&raquo;</span><a class="search-result" href="'+r.ref+'">' + store[r.ref].title + '</a></li>').join('');
+          $searchResults.empty().append('<ul class="search-result-list">' + list + '</ul>');
+        }
+      } else {
+        $searchResults.empty();
+      }
+    });
+  });
+});
+
+  </script>
+
 <hr/>

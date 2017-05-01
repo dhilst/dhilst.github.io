@@ -1,21 +1,6 @@
 ---
 layout: default
 ---
-<!--
-<div class="row">
-  <div class="col-12-sm">
-    <div class="input-group stylish-input-group">
-      <input type="text" class="form-control" style="padding: 10" placeholder="Search" />
-      <span class="input-group-addon" style="padding: 0">
-        <a class="btn clean-link" type="submit" style="padding: 0 12px">
-          <span class="glyphicon glyphicon-search"></span>
-        </a>
-      </span>
-    </div>
-  </div>
-</div>
-<hr></hr>
--->
 <ul class="post-list">
   {% for post in paginator.posts %}
       <a class="clean-link" href="{{ post.url | prepend: site.baseurl }}">
