@@ -8,6 +8,8 @@ $(() => {
 	$searchBar.focus();
 
 	$.getJSON('/posts.json', (posts) => {
+        posts.pop(); // Remove __SENTINEL__
+
 		const workingPosts = posts.filter((post) => !post.blogger);
 		const store = {};
 		workingPosts.forEach((post) => store[post.url] = post);
