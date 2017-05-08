@@ -1,59 +1,57 @@
-'use strict';
+Object.defineProperty(Object.prototype, 'inspect', {
+    value: function(prefix){ console.log(prefix, this); return this; },
+    enumerable: false
+});
+
 
 $(() => {
+'use strict';
 
-	const $searchBar = $("#search-bar [type='text']") ; 
+	const $searchBar = $("#search-bar [type='text']"); 
 	const $searchResults = $('#search-results');
 
 	$searchBar.focus();
 
+    $searchResults.notIn = function(results){
+        return this.find('li').filter((_, li) =>
+            results.indexOf($(li).find('a').attr('href') === -1));
+    };
+
+    $searchResults.hrefs = function(){
+        return this.find('li a').map(a => $(a).attr('href')).toArray();
+    };
+
+    $searchResults.appendNew = function(results, store){
+       return results.filter(x => this.hrefs().indexOf(x) === -1).forEach(url =>
+           this.find('ul').append(
+               $(["<li>",
+                   "  <span class='post-tags-mark'>&raquo;</span>",
+                   "  <a href='"+url+"' class='search-result'>",
+                        store[url].title,
+                   "  </a>",
+                   "</li>"].join(''))));
+    };
+
+
 	$.getJSON('/posts.json', (posts) => {
         posts.pop(); // Remove __SENTINEL__
 
-		const workingPosts = posts.filter((post) => !post.blogger);
 		const store = {};
-		workingPosts.forEach((post) => store[post.url] = post);
+		posts.forEach(post => store[post.url] = post);
 		const index = lunr(function() { 
 			this.ref('url');
 			this.field('title');
-			workingPosts.forEach((post) => this.add(post));
+            posts.forEach(post => this.add(post));
 		});
+
 		$searchBar.keyup(() => {
-			const searchText = $searchBar.val();
-			if (searchText.length > 1) {
-				var results = index.search(searchText);
-				if (results.length > 0) {
-                    console.log(results);
-                    // Remove unmatched
-                    $searchResults.find('li').filter(function(){
-                        return results.map(r => r.ref)
-                            .indexOf($(this).find('a').attr('href')) === -1;
-                    }).remove();
-                    // Remove dupplicates
-                    const $anchors = $searchResults.find('li a');
-                    if ($anchors.length > 0) {
-                        results = results.filter(function(r) {
-                            return $anchors.map(function(){
-                                return $(this).attr('href');
-                            }).toArray().indexOf(r.ref) === -1;
-                        });
-                        console.log('Filtred results: ' + results);
-                    }
-                    // Append result
-                    results.forEach((r) => {
-                        $searchResults.find('ul').append(
-                            $(["<li>",
-                               "  <span class='post-tags-mark'>&raquo;</span>",
-                               "  <a href='"+r.ref+"' class='search-result'>",
-                                    store[r.ref].title,
-                               "  </a>",
-                               "</li>"].join(''))
-                        );
-                    });
-				}
-			} else {
-				$searchResults.find('ul').empty();
-			}
+            if ($searchBar.val().length > 0) {
+                const results = index.search($searchBar.val()).map(r => r.ref);
+                $searchResults.notIn(results).remove();
+                $searchResults.appendNew(results, store);
+            } else {
+                $searchResults.find('ul li').remove();
+            }
 		});
 	});
 });
