@@ -27,7 +27,7 @@ $(() => {
                $(["<li>",
                    "  <span class='post-tags-mark'>&raquo;</span>",
                    "  <a href='"+url+"' class='search-result'>",
-                        store.title(url),
+                        store(url).title,
                    "  </a>",
                    "</li>"].join(''))));
     };
@@ -39,9 +39,7 @@ $(() => {
         const store = (function(posts){ 
             var s = {};
             posts.forEach(p => s[p.url] = p);
-            return {
-                title: function(url){ return s[url].title; },
-            };
+            return function(url) { return s[url]; };
         })(posts)
 
 		const index = lunr(function() { 
