@@ -27,7 +27,7 @@ $(() => {
                $(["<li>",
                    "  <span class='post-tags-mark'>&raquo;</span>",
                    "  <a href='"+url+"' class='search-result'>",
-                        store[url].title,
+                        store.title(url),
                    "  </a>",
                    "</li>"].join(''))));
     };
@@ -36,8 +36,14 @@ $(() => {
 	$.getJSON('/posts.json', (posts) => {
         posts.pop(); // Remove __SENTINEL__
 
-		const store = {};
-		posts.forEach(post => store[post.url] = post);
+        const store = (function(posts){ 
+            var s = {};
+            posts.forEach(p => s[p.url] = p);
+            return {
+                title: function(url){ return s[url].title; },
+            };
+        })(posts)
+
 		const index = lunr(function() { 
 			this.ref('url');
 			this.field('title');
