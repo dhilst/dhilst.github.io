@@ -1,9 +1,0 @@
----
----
-{ 
-    {% for post in site.posts %}"{{ post.url }}": {
-        "title": "{{ post.title | replace: '"', '\\"'}}",
-        "date": "{{ post.date }}",
-        "tags": [{% for tag in post.tags %}"{{ tag }}"{% if forloop.last == false %},{% endif %}{% endfor %}]
-    }{% if forloop.last == false %},{% endif %}{% endfor %}
-}

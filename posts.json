@@ -1,3 +1,8 @@
 ---
 ---
-{{ site.posts | jsonify }}
+[
+{% for post in site.posts %}{% if post.blogger %}{% else %}{
+	"url": {{ post.url | jsonify }},
+	"title": {{ post.title | jsonify }}
+},{% endif %}{% endfor %}"__SENTINEL__"
+]
