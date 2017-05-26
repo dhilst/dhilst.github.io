@@ -9,7 +9,7 @@ tags:
 
 This are the plugins I'm using for python development in vim.
 
-``` vim
+``` 
 set nocompatible              " be iMproved, required
 filetype off                  " required
 set rtp+=~/.vim/bundle/Vundle.vim
