@@ -16,7 +16,6 @@ set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
 Plugin 'Valloric/YouCompleteMe'
-Plugin 'digitaltoad/vim-pug'
 Plugin 'kevinw/pyflakes-vim'
 
 call vundle#end()            " required
