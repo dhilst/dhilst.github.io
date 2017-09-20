@@ -5,10 +5,10 @@ tags: [python,ast,AST,programming]
 ---
 
 The code bellow is an hello world using python abstract
-syntax tree. The code is built by hand craft and AST, compiling
+syntax tree. The code is built by hand craftng an AST, compiling
 and executing. If you're going to build something that compiles
 to python you'll hit this at some point. Also is very cool for
-larning how the interpreter parses the code.
+learning how the interpreter parses the code.
 
 ``` python
 import ast
