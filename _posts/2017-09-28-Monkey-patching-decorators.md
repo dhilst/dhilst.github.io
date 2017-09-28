@@ -72,7 +72,7 @@ class LoginProxy:
         return super().login()
 ```
 
-Pretty cool uh? But how these decorators are implemented?. Here it is the [gist](https://gist.github.com/dhilst/428f2fa4a0663150f20e1e0c4e445ef6 %}).
+Pretty cool uh? But how these decorators are implemented?. Here it is the [gist](https://gist.github.com/dhilst/428f2fa4a0663150f20e1e0c4e445ef6).
 
 Regards,
 Daniel.
