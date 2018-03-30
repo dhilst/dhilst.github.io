@@ -9,9 +9,9 @@ times while using Fedora and uncountable times in my life.
 
 To fix you need:
 
-1. Boot with a live cd/flashdrive.
-- Chroot to your system.
-- Reinstall grub.
+* Boot with a live cd/flashdrive.
+* Chroot to your system.
+* Reinstall grub.
 
 # Booting with live.
 
@@ -32,7 +32,7 @@ After two paragraphs of advices I say, this step has no secret, if you never
 booted a live CD you may reading this from windows and never faced the problem
 here addressed. So, go use linux; else, you do know how to boot a live image.
 
-# Chroot to your system.
+## Chroot to your system.
 
 This is a simple and nice tricky. You need to know what is the disk from where
 you want to boot, usually is `/dev/sda` but this may change. Once you know the
@@ -64,7 +64,7 @@ chroot /mnt
 Now you are on your system. Yay!!. Test the connectivity, you may need it. If
 you can't ping internet check `/etc/resolv.conf`... Let's reinstall grub.
 
-# Reinstalling grub2
+## Reinstalling grub2
 
 I'm assuming grub2 with EFI here. If you are in BIOS world, well you may
 travelled in time to the past while taking one printed copy of this post with
