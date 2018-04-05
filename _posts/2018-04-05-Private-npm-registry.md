@@ -110,4 +110,18 @@ verdaccio.service`
 npmuser@localhost:~/verdaccio $ sudo gpasswd -d npmuser wheel
 ```
 
+# Publishing
+
+To publish do the registry configure it at your npm. Also since we are using
+self signed certificate you need to disable `strict-ssl`. And last add your user,
+e-mail verification is not required.
+
+```bash
+you@yourmachine:~ $ npm config set registry https://<PRIVATE_REGISTRY_IP_OR_DOMAIN>:4873
+you@yourmachine:~ $ npm config set strict-ssl false
+```
+
+You can strict the authentication by following the [verdaccio docs about
+it](http://www.verdaccio.org/docs/en/packages.html).
+
 Cheers,
