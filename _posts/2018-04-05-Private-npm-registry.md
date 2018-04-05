@@ -97,11 +97,17 @@ EOF
 # Enable it and start it.
 
 ```bash
-sudo systmectl enable verdaccio.service
-sudo systmectl start verdaccio.service
+npmuser@localhost:~/verdaccio $ sudo systmectl enable verdaccio.service
+npmuser@localhost:~/verdaccio $ sudo systmectl start verdaccio.service
 ```
 
 That's it! You can check for the logs by `journalctl -xf --unit
 verdaccio.service`
+
+# Remove sudo if needed
+
+```bash
+npmuser@localhost:~/verdaccio $ sudo gpasswd -d npmuser wheel
+```
 
 Cheers,
