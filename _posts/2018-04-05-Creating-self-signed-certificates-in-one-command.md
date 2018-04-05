@@ -13,6 +13,6 @@ openssl req -x509 -nodes -newkey rsa:4096 -keyout key.pem -out cert.pem -days 36
 - `365` days to expire.
 - `4096` is the key lenght.
 
-If you want to fill organization, contry, common name and such, remove the `-batch` option.
+If you want to fill organization, country, common name and such, remove the `-batch` option.
 
 Regards
