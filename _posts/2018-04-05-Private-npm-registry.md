@@ -16,14 +16,14 @@ _Epel_'s _nodejs_.
 
 # Install epel and nodejs
 
-```
-yum install epel-release
-yum install nodejs
+```bash
+root@localhost:~ # yum install epel-release
+root@localhost:~ # yum install nodejs
 ```
 
 # Create a user, setup sudo and install verdaccio
 
-```
+```bash
 root@localhost:~ # useradd npmuser
 root@localhost:~ # passwd npmuser
 root@localhost:~ # usermod -aG wheel npmuser
@@ -31,7 +31,7 @@ root@localhost:~ # usermod -aG wheel npmuser
 
 # Log with and install verdaccio and create the config file
 
-```
+```bash
 root@localhost:~ # su - npmuser
 npmuser@localhost:~ $ npm install -g verdaccio
 npmuser@localhost:~ $ # Run it so it create the default config file
@@ -42,14 +42,14 @@ Wait it to start then stop it with _Ctrl+C_
 
 # Create a self signed certificate
 
-```
+```bash
 npmuser@localhost:~/verdaccio $ cd verdaccio
 npmuser@localhost:~/verdaccio $ openssl req -x509 -nodes -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365 -batch
 ```
 
 # Configure verdaccio
 
-```
+```bash
 npmuser@localhost:~/verdaccio $ cat << EOF > config.yaml
 
 listen: https://`hostname -f`:4873
@@ -58,20 +58,21 @@ https:
   key: ${HOME}/verdaccio/key.pem
   cert: ${HOME}/verdaccio/cert.pem
   ca: ${HOME}verdaccio/cert.pem
+EOF
 ```
 
 _Note: If you hasn't DNS configured replace ``hostname -f`` by your IP address._
 
 # Enable the port in firewall
 
-```
+```bash
 npmuser@localhost:~/verdaccio $ sudo firewall-cmd --zone public --add-port=4873/tcp --permanent
 npmuser@localhost:~/verdaccio $ sudo systemctl restart firewalld
 ```
 
 # Test it
 
-```
+```bash
 npmuser@localhost:~/verdaccio verdaccio
 ```
 
@@ -80,7 +81,7 @@ saying _No Package Published Yet_. Stop it with _Ctrl+C_.
 
 # Create the systemd service
 
-```
+```bash
 npmuser@localhost:~/verdaccio $ sudo cat <<EOF > /etc/systemd/system/verdaccio.service
 [Unit]
 Description=Private NPM registry.
@@ -95,7 +96,7 @@ EOF
 
 # Enable it and start it.
 
-```
+```bash
 sudo systmectl enable verdaccio.service
 sudo systmectl start verdaccio.service
 ```
