@@ -1,7 +1,14 @@
 ---
+layout: post
 title: RESTFull with social (Facebook) authentication using django-rest-auth.
 tags: [django, REST, Facebook, OAuth2]
 ---
+
+{% highlight ruby %}
+def foo
+  puts 'foo'
+end
+{% endhighlight %}
 
 In this tutorial I will show how to setup social authentication for RESTFull
 APIs using `django`, `django-rest-framework`, `django-rest-auth`,
@@ -25,12 +32,12 @@ and macOS.
 
 # Creating virtual enviroment and installing dependecies
 
-```shell
+{% highlight bash %}
 mkdir authexample
 cd authexample
 python -m venv py3env
 . py3env/bin/activate.sh
-```
+{% endhighlight %}
 
 This would be enough to create the virutalenv. For installing dependencies:
 
