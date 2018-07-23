@@ -20,4 +20,18 @@ options kvm-amd nested=1
 
 Then reboot, or reload the drivers. Rebooting is just easier.
 
+To check that it is enabled check the parameters at the _sys_ filesystem:
+
+```
+cat /sys/module/kvm_intel/parameters/nested
+```
+
+or
+
+```
+cat /sys/module/kvm_amd/parameters/nested
+```
+
+The output should be Y or 1.
+
 Cheer,
