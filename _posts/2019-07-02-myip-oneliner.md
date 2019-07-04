@@ -22,7 +22,7 @@ You can save it as a function
 myip() { curl https://api.myip.com -s | perl -lane 'print $1 if /"ip":"(.*?)"/g'; }
 ```
 
-And this will save you a lot of boring googling 
+And this will save you a lot of boring googling
 
 Cheers,
 
