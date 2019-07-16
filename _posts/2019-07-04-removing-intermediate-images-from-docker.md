@@ -11,7 +11,7 @@ users to create the final images.
 This is the command
 
 ```
-docker rmi $(docker images -f “dangling=true” -q)
+docker rmi $(docker images -f 'dangling=true' -q)
 ```
 
 Use it wisely
