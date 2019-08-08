@@ -14,6 +14,6 @@ network tools installed by default:
 docker run -ti amouat/network-utils bash
 ```
 
-Thanks (amouat)[https://hub.docker.com/u/amouat] you helped a lot!
+Thanks [amouat](https://hub.docker.com/u/amouat) you helped a lot!
 
 Cheers
