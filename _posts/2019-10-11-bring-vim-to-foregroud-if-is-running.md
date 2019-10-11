@@ -35,7 +35,7 @@ of memoised command. Cool uh?
 
 This is the python script: 
 
-{% gist https://gist.github.com/dhilst/22eaf6089cc35fb8d43b4a49b680a5a4 %} 
+{% gist 22eaf6089cc35fb8d43b4a49b680a5a4 %} 
 
 I may rewrite this to something simpler, 
 
