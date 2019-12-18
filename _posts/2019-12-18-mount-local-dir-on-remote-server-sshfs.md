@@ -4,8 +4,6 @@ title: How to mount local folder on remote system through ssfs
 tags: [sshfs, devel]
 ---
 
-# How to mount local folder on remote system through sshfs
-
 You need first create a tunnel from a remote port to your 22 port. Then you
 use this port for doing the reversed sshfs
 
