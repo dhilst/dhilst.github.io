@@ -17,7 +17,11 @@ If you're not using [vim-plug](https://github.com/junegunn/vim-plug), I really r
 to do so. Almost all vim plugins are compatible between plugin managers and this should not be
 different. Just place this lines between `call plug#begin('~/.vim/plugged')` and `call plug#end()`
 in your `.vimrc` and execute `:so %` to reload the file. Then run `:PlugInstall` and wait it to
-isntall the plugin.
+install the plugin.
+
+```
+Plug 'dhilst/vim-ansible-execute-task'
+```
 
 # Usage
 
@@ -31,6 +35,9 @@ This plugin define 3 user commands
 Here is a asciinema of it
 [![asciicast](https://asciinema.org/a/ezgOAViHxSNOjPaNf8vDhEqRx.svg)](https://asciinema.org/a/ezgOAViHxSNOjPaNf8vDhEqRx)
 
+# Source code
+
+https://github.com/dhilst/vim-ansible-execute-task
 
 Regards,
 
