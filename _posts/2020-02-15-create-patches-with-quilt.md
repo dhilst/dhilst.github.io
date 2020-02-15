@@ -1,4 +1,3 @@
-
 ---
 layout: post
 title: Create patches with quilt
