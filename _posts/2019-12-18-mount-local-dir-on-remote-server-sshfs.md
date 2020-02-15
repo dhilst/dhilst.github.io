@@ -1,6 +1,6 @@
 ---
 layout: post
-title: How to mount local folder on remote system through ssfs
+title: How to mount local folder on remote system through sshfs
 tags: [sshfs, devel]
 ---
 
