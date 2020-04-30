@@ -14,6 +14,12 @@ This is the command
 docker rmi $(docker images -f 'dangling=true' -q)
 ```
 
+If you need free space this can be usefull too
+
+```
+docker system prune
+```
+
 Use it wisely
 
 Cheers
