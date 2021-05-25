@@ -7,7 +7,7 @@ tags: [tests, database, docker, docker-compose, tmpfs]
 Here is how to creating a Postgres database in memory
 for testing!
 
-On your docker-compose replace the volume folter by a tmpfs entry, and you're done.
+On your docker-compose replace the volume folder by a tmpfs entry, and you're done.
 
 ```patch
 diff --git a/src/docker-compose-dev.yml b/src/docker-compose-dev.yml
