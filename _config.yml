@@ -10,8 +10,8 @@ title: D. Hilst's blog.
 email: danielhilst@gmail.com
 description: A humble online knowledge base.
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "http://dhilst.github.com" # the base hostname & protocol for your site
-github_username: dhilst 
+url: "http://dhilst.github.io" # the base hostname & protocol for your site
+github_username: dhilst
 
 # Build settings
 markdown: kramdown
