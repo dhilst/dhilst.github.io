@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Resutl<T,E> type in C#
+title: Result type in C#
 tags: [c#, csharp]
 ---
 
