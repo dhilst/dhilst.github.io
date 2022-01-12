@@ -3,9 +3,6 @@ layout: page
 title: About
 permalink: /about/
 ---
-
-# About me
-
 My name is Daniel, I've been working with development for the last 10 years.
 
 * I worked with embedded Linux, C, Kernel Development, and JNI interfaces up to 2017
