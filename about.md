@@ -4,13 +4,15 @@ title: About
 permalink: /about/
 ---
 
-Hi! My name first name is Daniel but most people call me by my second name: Hilst.
+# About me
 
-This is my personal blog about linux and programing. Here you will find
-guide, curiosities, tips and much more about programming in Linux environments.
-My challenges, thougts and cheat sheet are all posted here for latter references.
+My name is Daniel, I've been working with development for the last 10 years.
 
-I've been working with linux in the last 6 years. From embedded systems with constrained
-resources to high-end super-computers I've been facing all kinds of challenges in my
-day-to-day. Java, Python, CSS, Javacsript, webservers, embedded linux and much more can
-be found here. I hope you enjoy.
+* I worked with embedded Linux, C, Kernel Development, and JNI interfaces up to 2017
+* At this time I moved to web prograaming working with Python, Ruby, Javascript, (React mostly),
+  and C#/.NET core, and MySQL and PostgreSQL as databases.
+* At 2021 I switched to formal verification using Coq, working on formal verification of Tezos blockchain.
+
+
+I'm 35 years old, (born in 1986), Brazillian developer passionated by Programming Languages Design, Funcional
+Programming and Type Theory.
