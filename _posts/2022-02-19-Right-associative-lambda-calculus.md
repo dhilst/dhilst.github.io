@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Rigth associative lambda calculus
+title: Right associative lambda calculus
 author: Daniel Hilst
 tags: [lambda-calculus, parser, parsers, associativity, parse-combinators]
 ---
