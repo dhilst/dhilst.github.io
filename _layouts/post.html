@@ -1,52 +1,25 @@
 ---
 layout: default
 ---
-<article  itemscope itemtype="http://schema.org/BlogPosting">
 
-  <header >
-    <h2 class="post-title" itemprop="name headline">{{ page.title }}</h1>
-    <span class="post-tags-mark">&raquo;</span>
-    <p class="post-meta"><time datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">{{ page.date | date: "%b %-d, %Y" }}</time>{% if page.author %} • <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span itemprop="name">{{ page.author }}</span></span>{% endif %}</p>
-    <span class="post-tags-dash">&dash;</span>
-    {% for tag in page.tags %}
-      <small class="post-tags">{{ tag }}, </small>
-    {% endfor %}
-  </header>
-
-  <div  itemprop="articleBody">
-		{{ content }}
-	</div>
-  <div class='text-center'>
-    <ul class='pagination'>
-      {% if page.next.url %}
-      <li><a href="{{ page.next.url }}" class="next">&laquo;</a></li>
-      {% endif %}
-      {% if page.previous.url %}
-      <li><a href="{{ page.previous.url }}" class="previous">&raquo;</a></li>
-      {% endif %}
-    </ul>
-  </div>
-	<div class="comments">
-		<div id="disqus_thread"></div>
-		<script>
-
-		/**
-		 *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
-		 *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
-		/*
-		 var disqus_config = function () {
-		 this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
-		 this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
-	 };
-	 */
-		(function() { // DON'T EDIT BELOW THIS LINE
-				var d = document, s = d.createElement('script');
-				s.src = '//gkos-github-com.disqus.com/embed.js';
-				s.setAttribute('data-timestamp', +new Date());
-				(d.head || d.body).appendChild(s);
-		})();
-	</script>
-	<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-</div>
-
+<article class="post">
+  <h1 class="post-title">{{ page.title }}</h1>
+  <time datetime="{{ page.date | date_to_xmlschema }}" class="post-date">{{ page.date | date_to_string }}</time>
+  {{ content }}
 </article>
+
+{% if site.related_posts != empty %}
+<aside class="related">
+  <h3>Related posts</h3>
+  <ul class="related-posts">
+    {% for post in site.related_posts limit:3 %}
+      <li>
+        <a href="{{ site.baseurl }}{{ post.url }}">
+          {{ post.title }}
+          <small><time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date_to_string }}</time></small>
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+</aside>
+{% endif %}
