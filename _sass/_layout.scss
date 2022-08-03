@@ -2,8 +2,11 @@
 //
 // Styles for managing the structural hierarchy of the site.
 
-.container {
+.container-max-width {
   max-width: 45rem;
+}
+
+.container {
   padding-left: var(--spacer-2);
   padding-right: var(--spacer-2);
   margin-left:  auto;

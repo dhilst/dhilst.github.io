@@ -3,12 +3,13 @@
   {% include head.html %}
 
   <body>
-    <div class="container content">
+    <div id="container" class="container container-max-width content">
       <header class="masthead">
         <h3 class="masthead-title">
           <a href="{{ site.baseurl }}/" title="Home">{{ site.title }}</a>
 
           <nav class="nav">
+            <a onclick="togglemaximise(event)">⟺</a>
             {% for nav in site.nav %}
             <small><a href="{{ nav.url }}">{{ nav.title }}</a></small>
             {% endfor %}
@@ -30,8 +31,18 @@
       </footer>
     </div>
 
+    <script>
+      // toggle container-max-width class in main container
+      function togglemaximise(event) {
+        event.preventDefault();
+        document.querySelector("#container")
+          .classList.toggle("container-max-width")
+      }
+    </script>
+
     {% if site.ga_analytics %}
     <script>
+
       (function (i, s, o, g, r, a, m) {
         i["GoogleAnalyticsObject"] = r;
         (i[r] =
