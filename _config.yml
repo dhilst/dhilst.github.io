@@ -1,7 +1,7 @@
 # Setup
 title: dhilst
-baseurl: "" # the subpath of your site, e.g. /blog
-url: "http://dhilst.github.io" # the base hostname & protocol for your site
+baseurl: ""
+url: "https://dhilst.github.com"
 github_username: dhilst
 paginate: 1
 baseurl: ""
