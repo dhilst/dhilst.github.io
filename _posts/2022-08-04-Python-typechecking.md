@@ -135,7 +135,7 @@ This is for example the mechanism behind the OCaml (plain) modules.
 
 I introduce a new class `Record` to represent record types, again the
 type constructor is a function from types to types, in this example
-I should the encapsulation of naturals.
+I show the encapsulation of naturals.
 
 ```python
 # Receives a (T : Type) and return a the nat(T) type
@@ -225,7 +225,7 @@ def test_tlist():
 ```
 
 Ok, now I will indtroduce a vector type, vector is tlist, paired with
-it's lenght, it's a *type*, since the lenght of the list depends on the
+its lenght, it's a *type*, since the lenght of the list depends on the
 list, this is tecnically a dependent type. Yay!, here is it:
 
 ```python
