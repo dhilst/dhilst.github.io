@@ -83,25 +83,25 @@ evaluation, so something like this (in pseudo ruby):
 ```ruby
   def step
     case @expr
-	when Plus
-	  if @expr.a.is_a?(Value) && @expr.b.is_a?(Value)
-	    @expr = Val.new(@epxr.a.value + @expr.b.value)
-	  elsif not @expr.a.is_a?(Value)
-		@cont = [:plus_b, @expr.b]
-	    @expr = @expr.a
-	  end
+    when Plus
+      if @expr.a.is_a?(Value) && @expr.b.is_a?(Value)
+        @expr = Val.new(@epxr.a.value + @expr.b.value)
+      elsif not @expr.a.is_a?(Value)
+        @cont = [:plus_b, @expr.b]
+        @expr = @expr.a
+      end
     when Value
-	  case cont&.first
-	  when :plus_b
-	    # continue by evaluating b
-		b = cont.second
-		cont = [:plus_apply, @expr] # @expr is the evaluated a
-		@expr = b
-	  when :plus_apply
-	    a = cont.second
-		b = @expr
-	    @expr = Plus.new(a, b)
-		@cont = nil
+      case cont&.first
+      when :plus_b
+        # continue by evaluating b
+        b = cont.second
+        cont = [:plus_apply, @expr] # @expr is the evaluated a
+        @expr = b
+      when :plus_apply
+        a = cont.second
+        b = @expr
+        @expr = Plus.new(a, b)
+        @cont = nil
       end
     end
   end
@@ -246,15 +246,3 @@ the authors!
 * [https://matt.might.net/articles/cek-machines/](https://matt.might.net/articles/cek-machines/)
 * [https://www.youtube.com/watch?v=Ju3KKu_mthg](https://www.youtube.com/watch?v=Ju3KKu_mthg)
 * [http://www.madore.org/~david/computers/callcc.html](https://www.youtube.com/watch?v=Ju3KKu_mthg)
-
-
-
-
-
-
-
-
-
-
-
-  
