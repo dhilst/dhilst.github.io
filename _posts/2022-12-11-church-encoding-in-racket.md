@@ -20,8 +20,15 @@ the same goal. By doing it with Racket macros I don't have to deal
 with the AST and evaluation details, it's a perfect tree
 transformation prototyping tool, so let's go.
 
-Since Racket is a LISP dialect I will use I will use `(data option
-(some x) (none))`and `(match x ((some x) x) ((none) 0))` forms.
+Since Racket is a LISP dialect I will use these forms
+
+```racket
+(data option (some x)(none))
+
+(match x
+  ((some x) x)
+  ((none) 0))
+```
 
 Starting with `(data option (some x) (none))` the first step was to
 write the expansion by hand and then trying to translate it to a
@@ -31,9 +38,9 @@ Google for it as there are plenty of materials on this topic.
 Regarding this post, you just need to know that Church encoding is a
 way to encode data as functions. The insight is that data will be a
 high order function that will receive one callback for each construtor
-that it haves (in the `option` data type we have the constructors
-`some` and `none`) and it will call the callback correspoding do the
-variant that it is. It's easier to understand with an example, so here
+(in the `option` data type we have two  constructors, `some` and `none`)
+and it will call the callback correspoding do the variant that it is.
+It's easier to understand with an example, so here
 is it for option:
 
 ```racket
@@ -151,7 +158,7 @@ And here is it with some examples:
   [(none) "is none"]) ;; outputs "is none"
 ```
 
-You can find the full code here: https://gist.github.com/dhilst/3920b4da168f85e476be4193db541182
+You can find the full code [here](https://gist.github.com/dhilst/3920b4da168f85e476be4193db541182)
 
 So to conclude: It's very feasible to have algebraic data types as
 syntax sugar for functions.
