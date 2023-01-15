@@ -1,13 +1,13 @@
 ---
 layout: post
-title: Implementing ADT with macros in Racket using Church encoding
-tags: [church-encoding, lambda-calculus, racket, scheme]
+title: Implementing ADT with macros in Racket using Scott encoding
+tags: [scott-encoding, lambda-calculus, racket, scheme]
 ---
 
 I was playing with a simple ML like grammar in the past weeks
 involving algebraic data types at the form `data <type> = <ctr> <arg0>
 ... <argn> | ...` I got me asking myself if it would be possible to
-compile this to Church encoding so that we have only functions at
+compile this to Scott encoding so that we have only functions at
 evaluation time. I will use option type as example here: `data option
 = some x | none` and match expressions as eliminators `match x with |
 some x => x | none => 0 end`.
@@ -32,10 +32,10 @@ Since Racket is a LISP dialect I will use these forms
 
 Starting with `(data option (some x) (none))` the first step was to
 write the expansion by hand and then trying to translate it to a
-macro. If you don't know [Church
-encoding](https://en.wikipedia.org/wiki/Church_encoding) you can
+macro. If you don't know [Scott
+encoding](https://en.wikipedia.org/wiki/Mogensen%E2%80%93Scott_encoding) you can
 Google for it as there are plenty of materials on this topic.
-Regarding this post, you just need to know that Church encoding is a
+Regarding this post, you just need to know that Scott encoding is a
 way to encode data as functions. The insight is that data will be a
 high order function that will receive one callback for each construtor
 (in the `option` data type we have two  constructors, `some` and `none`)
@@ -162,6 +162,3 @@ You can find the full code [here](https://gist.github.com/dhilst/3920b4da168f85e
 
 So to conclude: It's very feasible to have algebraic data types as
 syntax sugar for functions.
-
-I know that Church encoding is considered harmful because it has some
-performance hit, but I don't care 🤷, it's cool anyway
