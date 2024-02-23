@@ -1,3 +1,4 @@
+---
 layout: post
 title: How to redeploy on kubernets after an image update
 tags: [kubernets, ks8, docker, image, deploy]
