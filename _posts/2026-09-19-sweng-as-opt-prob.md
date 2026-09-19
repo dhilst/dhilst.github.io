@@ -28,14 +28,14 @@ Let:
 When an error reveals that the code violates its intent, development performs
 two operations:
 
-	Tₜ₊₁ = Tₜ ∪ {test(e)}
+		Tₜ₊₁ = Tₜ ∪ {test(e)}
 
-	Cₜ₊₁ = fix(Cₜ, e)
+		Cₜ₊₁ = fix(Cₜ, e)
 
 The test converts an observed error into an executable constraint. The code is
 changed until it satisfies that constraint.
 
-	Iᵥ → Cₜ → e → Tₜ₊₁ → Cₜ₊₁
+		Iᵥ → Cₜ → e → Tₜ₊₁ → Cₜ₊₁
 
 Over time, the test suite becomes executable knowledge about the boundaries of
 the software’s intent.
@@ -44,12 +44,12 @@ the software’s intent.
 
 For code C and intent Iᵥ, define:
 
-	Eᵥ(C) ∈ {🟢, 🔴}
+		Eᵥ(C) ∈ {🟢, 🔴}
 
 where 🔴 means that the code violates Iᵥ in production and 🟢 means that it
 satisfies Iᵥ, and:
 
-	T(C) ∈ {🟢, 🔴}
+		T(C) ∈ {🟢, 🔴}
 
 where 🔴 means that the test suite is red and 🟢 means that it is green.
 
@@ -64,15 +64,15 @@ intent.
 A test suite T is sound _(correct)_ when every test failure represents a real
 production failure:
 
-	T(C) = 🔴 ⇒ Eᵥ(C) = 🔴
+		T(C) = 🔴 ⇒ Eᵥ(C) = 🔴
 
 It is complete when every production failure is detected by the tests:
 
-	Eᵥ(C) = 🔴 ⇒ T(C) = 🔴
+		Eᵥ(C) = 🔴 ⇒ T(C) = 🔴
 
 A suite that is both sound and complete satisfies:
 
-	T(C) = 🔴 ⇔ Eᵥ(C) = 🔴
+		T(C) = 🔴 ⇔ Eᵥ(C) = 🔴
 
 In practice, we cannot enumerate every program state or completely formalize
 intent _(in fact we can, it is called formal verification)_. Production instead
@@ -80,7 +80,7 @@ supplies counterexamples to the suite’s predictions.
 
 Suppose the suite is green but production fails:
 
-	T(C) = 🟢 ∧ Eᵥ(C) = 🔴
+		T(C) = 🟢 ∧ Eᵥ(C) = 🔴
 
 We reproduce the error with a test, confirm that the test fails, fix the code
 and confirm that it passes. A test that passes before the fix does not capture
@@ -89,7 +89,7 @@ the error.
 We can describe the remaining gap as the probability of an undetected
 production failure:
 
-	d(Tₜ, Eᵥ) = P(Eᵥ(Cₜ) = 🔴 ∧ Tₜ(Cₜ) = 🟢)
+		d(Tₜ, Eᵥ) = P(Eᵥ(Cₜ) = 🔴 ∧ Tₜ(Cₜ) = 🟢)
 
 _i.e. “The distance between the test suite at time t and production errors
 equals the probability that the code fails in production while the test suite
@@ -97,7 +97,7 @@ remains green.”_
 
 For a fixed version v, repeated refinement may drive this distance toward zero:
 
-	d(Tₜ, Eᵥ) → 0
+		d(Tₜ, Eᵥ) → 0
 
 ### Soundness and completeness as functions
 
@@ -105,14 +105,14 @@ Let T be a test suite.
 
 Define:
 
-	soundness(T) ∈ [0, 1]
+		soundness(T) ∈ [0, 1]
 
 where soundness(T) = 1 means that every 🟢 result is correct, while
 soundness(T) = 0 means that a 🟢 result provides no evidence of correctness.
 
 Similarly:
 
-	completeness(T) ∈ [0, 1]
+		completeness(T) ∈ [0, 1]
 
 where completeness(T) = 1 means that every required behavior is tested, while
 completeness(T) = 0 means that none of the required behavior is tested.
@@ -129,11 +129,11 @@ constraints under which the software operates. These pressures produce a new
 intent before development fully converges on the previous one. Will call all
 these pressures "the update pressure" and denote it by U; so we have:
 
-	Iᵥ₊₁ = U(Iᵥ)
+		Iᵥ₊₁ = U(Iᵥ)
 
 At time t, the active version is vₜ, so the distance being minimized is:
 
-	dₜ = d(Tₜ, Eᵥₜ)
+		dₜ = d(Tₜ, Eᵥₜ)
 
 Software may converge toward the intent of a particular version, but the
 sequence of versions does not necessarily converge toward a final intent, (it
@@ -151,13 +151,13 @@ representations of the system.
 
 Let F(C) be the fast-suite result and S(C) the slow-suite result. We want:
 
-	F(C) = 🟢 ⇒ S(C) = 🟢
+		F(C) = 🟢 ⇒ S(C) = 🟢
 
 _"If fast test suite is green, then slow test suite is green too"_
 
 Equivalently _(by contrapositive)_:
 
-	S(C) = 🔴 ⇒ F(C) = 🔴
+		S(C) = 🔴 ⇒ F(C) = 🔴
 
 Whenever the slow suite finds a defect missed by the fast suite, we create a
 fast test that captures the same underlying problem.
@@ -175,12 +175,12 @@ individually, they accumulate indefinitely.
 
 Instead, the agent tests a batch of N pull requests together. Let:
 
-	Bₖ = {b₁, b₂, …, bₙ}
+		Bₖ = {b₁, b₂, …, bₙ}
 
 be the candidate branches in iteration k. At the beginning of each iteration,
 the agent recreates a temporary integration branch:
 
-	Aₖ = merge(Bₖ)
+		Aₖ = merge(Bₖ)
 
 The slow suite Sₖ runs once against Aₖ rather than once for every candidate
 branch. The loop is:
@@ -209,19 +209,19 @@ runtime behavior covered by Sₖ.
 Here, completeness is measured relative to behavior observable at runtime. As
 runtime errors are converted into slow tests:
 
-	completeness(Sₖ) → 1
+		completeness(Sₖ) → 1
 
 Failures found by Sₖ are then transferred into the fast suite Fₖ on the branch
 that owns them. Consequently:
 
-	completeness(Fₖ) → completeness(Sₖ)
+		completeness(Fₖ) → completeness(Sₖ)
 
 _"The completeness of the fast-suite goes to the completeness of the slow suite..."_.
 
 The slow suite learns from runtime, while the fast suite learns from the slow
 suite. Therefore:
 
-	completeness(Fₖ) → 1
+		completeness(Fₖ) → 1
 
 _" ... therefore the completeness of the fast-suite goes to 1."
 
@@ -232,7 +232,7 @@ the individual branches and their fast tests.
 The AI therefore drives completeness. It repeatedly converts behavior observed
 at one level into a test at the level below it:
 
-	runtime → slow suite → fast suite
+		runtime → slow suite → fast suite
 
 ## The outer loop *(Human)*
 
@@ -262,7 +262,7 @@ This review drives soundness. A test can increase completeness while encoding
 the wrong behavior. A fix can also produce 🟢 without solving the intended
 problem. The outer loop attempts to prevent these false greens:
 
-	soundness(Tₜ) ↛ 0
+		soundness(Tₜ) ↛ 0
 
 _"Developer prevents soundness decay"_
 
@@ -302,10 +302,10 @@ denote X size or quantity at time t.
 
 ### Conjecture 1: Test-suite quality hypothesis
 
-	|Eₜ| → 0
+		|Eₜ| → 0
 as
 
-	completeness(Tₜ) → 1 ∧ soundness(Tₜ) → 1
+		completeness(Tₜ) → 1 ∧ soundness(Tₜ) → 1
 
 _"i.e. we expect the number of runtime failures to drop as the quality of tests improve."_
 
@@ -313,11 +313,11 @@ _"i.e. we expect the number of runtime failures to drop as the quality of tests 
 
 For a codebase & test suite evolved without human supervision:
 
-	|Cₜ| → ∞ ∧ completeness(Tₜ) → 1 ∧ soundness(Tₜ) → 0
+		|Cₜ| → ∞ ∧ completeness(Tₜ) → 1 ∧ soundness(Tₜ) → 0
 
 as:
 
-	t → ∞
+		t → ∞
 
 The AI continually generates code and converts observed failures into tests,
 driving completeness. Without human interpretation of software intent, those
