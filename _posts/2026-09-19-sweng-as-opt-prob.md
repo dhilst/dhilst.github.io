@@ -239,9 +239,36 @@ intended problem.
 *“The developer prevents the soundness of the test suite from decaying to
 zero.”*
 
+You may ask _"Doesn't the developer drives soundness toward 1?"_, and I would
+say, _"ideally yes"_, but it is not garanteed. AI may produce sound tests & the
+developer may produce unsound tests, but in the longrun, the tendency I see
+is developer detecting the unsoundness and AI propagating unsoundness. Developers
+captured unsoundness in the pre-AI area like this:
+
+- You find a problem
+- You fix it
+- You find a problem, slightly distinct from the previous one
+- You fix it
+- You find a problem, slightly distinct from the previous one
+- You fix it
+- You find a problem, slightly distinct from the previous one
+- You refuse to fix it, you analyse better, see the patterns, all previous
+problems were a symptom of a deeper problem. You fix the deeper problem.
+
 In practice, developers cannot build understanding as quickly as AI can
-generate changes. Human attention is therefore the bottleneck. Some incorrect
-tests and fixes will pass through the outer loop.
+generate changes. Human cognition is therefore the bottleneck. Some incorrect
+tests and fixes will pass through the outer loop. On the long run the
+developers see the pattern in the fixes/failures and findout the root cause, at
+this point the deveper points the AI to the proper fix. But for this to happen
+the developers have to analyse the failures/fixes; at some point refuse
+to blindly accept, and go deeper. This is how correctness _(the other name for
+soundness)_ gets into the codebase on these days.
+
+So software development is a game of pressures, external forces pressure for
+updates, AI pressures quality down while release update pressure, developer
+pressure for quality up, gating risky updates. If the system find equilibrium,
+the product evolves, if some of these forces get out of control, the product
+crumbles.
 
 AI drives the inner loop toward completeness. Humans drive the outer loop
 toward soundness.
@@ -250,9 +277,8 @@ toward soundness.
 
 Software development is a nested optimization loop:
 
-``` AI: minimize d(B(Cₜ), Iᵥₜ) maximize completeness(Tₜ)
-
-Human: preserve soundness(Tₜ) ```
+**AI: minimize d(B(Cₜ), Iᵥₜ) & maximize completeness(Tₜ)
+Human: preserve soundness(Tₜ)**
 
 *“AI implements the intended behavior and expands test coverage; humans ensure
 that passing the tests still means something.”*
