@@ -61,71 +61,44 @@ violated its intent.
 
 _"We assume failing in production is not part of any software intent"_.
 
+
 ## Soundness and completeness
 
-A test-suite T is sound _(correct)_ when every test failure represents a real
-production failure:
-
-	T(C) = 🔴 ⇒ Eᵥ(C) = 🔴
-
-It is complete when every production failure is detected by the tests:
-
-	Eᵥ(C) = 🔴 ⇒ T(C) = 🔴
-
-A suite that is both sound and complete satisfies:
-
-	T(C) = 🔴 ⇔ Eᵥ(C) = 🔴
-
-_"Every test prevent a pproduction failure and every possible production
-failure is catpured by a test"_
-
-In practice, we cannot enumerate every program state or completely formalize
-intent _(in fact we can, it is called formal verification, it's just the case
-that I, and most of you can't)_. Production instead supplies counterexamples to
-the suite’s predictions.
-
-Suppose the suite is green but production fails:
-
-	T(C) = 🟢 ∧ Eᵥ(C) = 🔴
-
-We reproduce the error with a test, confirm that the test fails, fix the code
-and confirm that it passes. A test that passes before the fix does not capture
-the error.
-
-We can describe the remaining gap as the probability of an undetected
-production failure:
-
-	d(Tₜ, Eᵥ) = P(Eᵥ(Cₜ) = 🔴 ∧ Tₜ(Cₜ) = 🟢)
-
-_i.e. “The distance between the test suite at time t and production errors
-equals the probability that the code fails in production while the test suite
-remains green.”_
-
-For a fixed version v, repeated refinement may drive this distance toward zero:
-
-	d(Tₜ, Eᵥ) → 0
-
-### Soundness and completeness as functions
-
-Let T be a test suite.
-
-Define:
-
-	soundness(T) ∈ [0, 1]
-
-where soundness(T) = 1 means that every 🟢 result is correct, while
-soundness(T) = 0 means that a 🟢 result provides no evidence of correctness.
-
-Similarly:
+Let T be a test suite. Its quality has two dimensions:
 
 	completeness(T) ∈ [0, 1]
 
-where completeness(T) = 1 means that every required behavior is tested, while
-completeness(T) = 0 means that none of the required behavior is tested.
+*“The completeness of T is a value between zero and one.”*
 
-A useful test suite must maximize both properties. Completeness asks whether
-the suite covers the intended behavior. Soundness asks whether passing the
-suite actually implies correctness.
+Completeness measures how much of the intended behavior is covered by T. A
+value of 1 means that every relevant behavior is tested; a value of 0 means
+that none is tested.
+
+	soundness(T) ∈ [0, 1]
+
+*“The soundness of T is a value between zero and one.”*
+
+Soundness measures how reliably passing T implies correct behavior. A value of
+1 means that every 🟢 result is correct; a value of 0 means that 🟢 provides no
+evidence of correctness.
+
+A suite can be complete but unsound: it may test every requirement while
+encoding some of them incorrectly. It can also be sound but incomplete:
+everything it checks is correct, but important behavior remains untested.
+
+A useful test suite must therefore maximize both:
+
+	completeness(T) → 1 ∧ soundness(T) → 1
+
+*“The completeness and soundness of T should both approach one.”*
+
+In practice, intent cannot be completely formalized and every program state
+cannot be tested. Production supplies counterexamples to the test suite. When
+the suite is 🟢 but production fails, it has produced a false green:
+
+	T(C) = 🟢 ∧ Eᵥ(C) = 🔴
+
+*“The test suite passes the code, but the code fails in production.”*
 
 ## The moving target
 
