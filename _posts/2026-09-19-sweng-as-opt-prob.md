@@ -1,6 +1,6 @@
 --- 
 layout: post
-title: "How I view Software Development in the AI era"
+title: "How I see Software Development in the AI era"
 tags: [software, software-engineering]
 ---
 Most software is not proven correct before release. It is tested, judged good
