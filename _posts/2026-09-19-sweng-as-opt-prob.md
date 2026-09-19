@@ -46,8 +46,8 @@ For code C and intent Iᵥ, define:
 
 	Eᵥ(C) ∈ {🟢, 🔴}
 
-where 🔴 means that the code violates Iᵥ in production and 🟢 means that it
-satisfies Iᵥ, and:
+where 🔴 means that _runtime error in production_ and 🟢 means that it
+satisfies Iᵥ, (i.e., correct behavior); and:
 
 	T(C) ∈ {🟢, 🔴}
 
@@ -56,12 +56,14 @@ where 🔴 means that the test suite is red and 🟢 means that it is green.
 The test suite is a predictor of production failure. It can be wrong in two
 ways. A false positive occurs when the suite is red but the code would succeed
 in production. A false negative occurs when the suite is green but the code
-fails. The second case means that the suite approved code that violated its
-intent.
+fails in production. The second case means that the suite approved code that
+violated its intent. 
+
+_"We assume failing in production is not part of any software intent"_.
 
 ## Soundness and completeness
 
-A test suite T is sound _(correct)_ when every test failure represents a real
+A test-suite T is sound _(correct)_ when every test failure represents a real
 production failure:
 
 	T(C) = 🔴 ⇒ Eᵥ(C) = 🔴
@@ -74,9 +76,13 @@ A suite that is both sound and complete satisfies:
 
 	T(C) = 🔴 ⇔ Eᵥ(C) = 🔴
 
+_"Every test prevent a pproduction failure and every possible production
+failure is catpured by a test"_
+
 In practice, we cannot enumerate every program state or completely formalize
-intent _(in fact we can, it is called formal verification)_. Production instead
-supplies counterexamples to the suite’s predictions.
+intent _(in fact we can, it is called formal verification, it's just the case
+that I, and most of you can't)_. Production instead supplies counterexamples to
+the suite’s predictions.
 
 Suppose the suite is green but production fails:
 
