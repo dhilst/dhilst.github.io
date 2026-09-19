@@ -84,6 +84,10 @@ Soundness measures how reliably passing T implies correct behavior. A value of
 1 means that every 🟢 result is correct; a value of 0 means that 🟢 provides no
 evidence of correctness.
 
+_As a real world example I saw was the test checking a function exists. This is
+unsound because the function may exist and be completely wrong. The tests
+passes but the function fail in production._
+
 Intent Iᵥ is implicit in both functions. More explicitly, they could be written
 as `completeness(T, Iᵥ)` and `soundness(T, Iᵥ)`.
 
