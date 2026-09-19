@@ -1,5 +1,4 @@
 ---
-
 layout: post
 title: "How I See Software Development in the AI Era"
 tags: [software, software-engineering]
