@@ -2,7 +2,7 @@
 layout: post
 title: "How I See Software Development in the AI Era"
 tags: [software, software-engineering]
---------------------------------------
+---
 
 Most software is not proven correct before release. It is tested, judged good
 enough, and shipped. When it fails in production, we fix it, add a test, and
