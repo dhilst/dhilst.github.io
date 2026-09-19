@@ -277,8 +277,9 @@ toward soundness.
 
 Software development is a nested optimization loop:
 
-**AI: minimize d(B(Cₜ), Iᵥₜ) & maximize completeness(Tₜ)
-Human: preserve soundness(Tₜ)**
+**AI: minimize d(B(Cₜ), Iᵥₜ) & maximize completeness(Tₜ)**
+
+**Human: preserve soundness(Tₜ)**
 
 *“AI implements the intended behavior and expands test coverage; humans ensure
 that passing the tests still means something.”*
