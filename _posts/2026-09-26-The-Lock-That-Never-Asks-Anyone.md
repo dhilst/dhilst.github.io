@@ -87,6 +87,16 @@ init {
 }
 ```
 
+A quick note on reading transitions. A transition is one step of the system,
+written as a condition over two states: the state *before* the step and the
+state *after* it. A plain name like `st[p]` is the value **before** the step;
+the same name with a prime, `st[p]'`, is the value **after** it. So
+`st[p] = waiting ∧ st[p]' = holding` reads "p was waiting, and now it's
+holding". Lines that mention only unprimed names are the *guard* (when the step
+may happen); lines with primes are the *effect* (what the step changes).
+`unchanged(x, y)` is shorthand for `x' = x ∧ y' = y`: everything not listed
+there, and not assigned, would be free to change, so we pin it down.
+
 The whole protocol is one guard:
 
 ```
