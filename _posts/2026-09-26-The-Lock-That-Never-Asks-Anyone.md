@@ -94,8 +94,9 @@ the same name with a prime, `st[p]'`, is the value **after** it. So
 `st[p] = waiting ∧ st[p]' = holding` reads "p was waiting, and now it's
 holding". Lines that mention only unprimed names are the *guard* (when the step
 may happen); lines with primes are the *effect* (what the step changes).
-`unchanged(x, y)` is shorthand for `x' = x ∧ y' = y`: everything not listed
-there, and not assigned, would be free to change, so we pin it down.
+`∧` is "and", `∨` is "or". `unchanged(x, y)` is shorthand for
+`x' = x ∧ y' = y`: a variable the step doesn't mention could take *any* value
+after it, so we pin down everything the step shouldn't touch.
 
 The whole protocol is one guard:
 
@@ -103,8 +104,10 @@ The whole protocol is one guard:
 transition acquire(p ∈ Proc) {
   // p is waiting,
   st[p] = waiting ∧
-  // the lock is free, or stale and owned by p's host:
-  (rec = none ∨ (rec = stale ∧ owner = host[p])) ∧
+  // the lock is free, or stale
+  // and owned by p's host:
+  (rec = none ∨
+    (rec = stale ∧ owner = host[p])) ∧
   // p now holds it,
   st[p]' = holding ∧
   // the lock is live
@@ -147,13 +150,26 @@ transition crash(p ∈ Proc) {
 }
 ```
 
-And what we demand:
+And what we demand. Properties talk about whole runs of the system, over time,
+using two temporal operators:
+
+- `□ φ`, **always**: φ holds in every state, from now on. `□ (x ≠ 2)` means
+  "x is never 2".
+- `◇ φ`, **eventually**: φ holds in some state, now or later. `◇ (x = 2)` means
+  "x will be 2 at some point".
+
+Combined, `□ (a → ◇ b)` reads "whenever a happens, b follows eventually": the
+shape of every "no deadlock" promise. `∀ p ∈ Proc:` is "for every process p", and
+`→` is "implies".
+
 
 ```
-// No data corruption: at most one holder.
+// No data corruption:
+// at most one holder.
 property mutual_exclusion {
   □ (∀ p ∈ Proc: ∀ q ∈ Proc:
-       (p ≠ q ∧ st[p] = holding) → st[q] ≠ holding)
+       (p ≠ q ∧ st[p] = holding) →
+         st[q] ≠ holding)
 }
 
 // No deadlock: a crashed lock is
@@ -168,7 +184,8 @@ property crash_recoverable {
 // eventually gets the lock.
 property work_progresses {
   □ (∀ p ∈ Proc:
-       st[p] = waiting → ◇ (st[p] = holding))
+       st[p] = waiting →
+         ◇ (st[p] = holding))
 }
 ```
 
