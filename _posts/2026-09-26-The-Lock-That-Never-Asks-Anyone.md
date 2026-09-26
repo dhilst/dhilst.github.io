@@ -211,22 +211,32 @@ property crash_recoverable {
          ◇ (lock = locked ∧ owner = h))
 }
 
-// Progress: every waiting process
-// eventually gets the lock.
+// Progress: the lock keeps being
+// taken; the pipeline never stalls.
 property work_progresses {
-  □ (∀ p ∈ Proc:
-       st[p] = waiting →
-         ◇ (st[p] = holding))
+  □ ◇ (lock = locked)
 }
 ```
 
 All properties hold: **44 states, checked in about a second in the browser.**
 
+Per-process progress, `□ (∀ p: waiting(p) → ◇ holding(p))`, does **not**
+hold. A process that keeps crashing on one host and recovering its own stale
+lock can starve the processes on the other host: the lock is always either
+held or stale and owned by the other host, so their `acquire` is never
+enabled. `work_progresses` above is the weaker, system-level guarantee.
+
+An earlier version of this article claimed per-process progress. Cross-checking
+the model with Caelum's bounded model checker and Z3 produced the crash-loop
+counterexample, which exposed a bug in the fairness handling of Caelum's
+explicit-state engine; the engine is now fixed and agrees.
+
 Writing the model required stating every assumption explicitly: only the
 owner's host decides whether the holder is dead (A0), acquiring the lock is
-atomic (A1), processes terminate (A2) and eventually acquire the lock (A3), and
-a crashed process is restarted (A4). If A4 does not hold, the lock remains
-until an operator removes it; this is the cost of not coordinating.
+atomic (A1), processes terminate (A2), an acquire that keeps becoming possible
+eventually happens (A3), and a crashed process is restarted (A4). If A4 does
+not hold, the lock remains until an operator removes it; this is the cost of
+not coordinating.
 
 ## Result: a simpler implementation
 
