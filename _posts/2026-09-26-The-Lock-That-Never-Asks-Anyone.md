@@ -1,79 +1,83 @@
 ---
-title: "The Lock That Never Asks Anyone: Dodging Consensus with a Model Checker"
+title: "A Distributed Pipeline Formalization in Caelum"
 date: 2026-09-26
 categories: [formal-verification, model-checking, caelum, distributed-systems, nfs]
 ---
 
-This is the story of a boring lock. It doesn't talk to anybody, doesn't elect a
-leader, doesn't heartbeat, doesn't read the clock, and still can't corrupt your
-data or get stuck. Getting to "boring" took a model checker, a few assumptions,
-and a firm refusal to implement Raft on a Tuesday.
+This article describes how I used Caelum to formalize a lock protocol and
+verify that it prevents data corruption and deadlock.
 
-The spec runs in your browser:
+The specification can be checked in the browser:
 [NFS Shared Lock in the Caelum docs](https://dhilst.github.io/caelum/real-world/nfs-shared-lock.html).
 
-## The setup
+## Context
 
-A big pipeline runs across several machines and produces a *lot* of data, so
-moving data between machines is out. The machine that **produces** a dataset
-isn't the one that **validates** it, and validation may write files next to the
-data it checks.
+A data pipeline runs across several machines and produces large volumes of
+data, so transferring data between machines must be avoided. The machine that
+**produces** a dataset is not the one that **validates** it, and validation may
+write files next to the data it checks.
 
-So every machine mounts the same NFS export as a shared scratch space. Before
-writing into a directory, a job **locks** it. Anyone may read; writing happens
-only under the lock.
+All machines therefore mount the same NFS export as a shared scratch space.
+Before writing into a directory, a job **locks** it. Any job may read; writes
+happen only while holding the lock.
 
-Two rules:
+Requirements:
 
-- **No data corruption.** Two jobs never write the same directory at once. If a
-  bug makes them try, one should **fail loudly** (wait or time out), not
-  silently overwrite the other.
-- **No deadlock.** If a job crashes while holding the lock, the next run must
-  still be able to proceed.
+- **No data corruption.** Two jobs never write to the same directory
+  concurrently. If a defect causes two jobs to attempt it, one of them must
+  **fail loudly** (wait or time out) instead of silently overwriting the other.
+- **No deadlock.** If a job crashes while holding the lock, the next run of that
+  job must still be able to proceed.
 
-## How a lock turns into a consensus problem
+## How a lock becomes a consensus problem
 
-1. "I'll put a lock there." Fine.
-2. "What if the holder crashes?" The lock stays forever and the pipeline heats
-   the server room.
-3. "Then break locks that are *old*." Old according to whom? A *slow* holder
-   (swapping, stuck on I/O, paused VM) looks exactly like a dead one. Now two
-   jobs hold the lock: the silent corruption we built the lock to prevent.
-4. "Then heartbeats, leases, fencing tokens, and someone to hand out tokens,
-   and a few of those so they can't crash, and they need to agree…"
+A straightforward design evolves as follows:
 
-Congratulations, you are implementing consensus. The wall is real: **a remote
-observer can't tell a crashed process from a slow one** (that's the heart of
-[FLP](https://en.wikipedia.org/wiki/Consensus_%28computer_science%29#The_FLP_impossibility_result_for_asynchronous_deterministic_consensus)). Any design where one machine must decide "that *other* machine's process
-is dead" ends up here.
+1. A job creates a lock before writing and removes it afterwards.
+2. If the holder crashes, the lock is never removed and the pipeline stops.
+3. A common remedy is to break locks older than some threshold. However, a
+   *slow* holder (swapping, blocked on I/O, paused VM) is indistinguishable
+   from a dead one, so two jobs can end up holding the lock: the silent
+   corruption the lock exists to prevent.
+4. Preventing that requires heartbeats, leases, fencing tokens, and a service
+   that issues the tokens; making that service fault tolerant requires several
+   replicas that agree on its state.
 
-So the trick isn't to coordinate better. It's to **not coordinate at all.**
+At this point the design requires consensus. The underlying reason is that
+**a remote observer cannot distinguish a crashed process from a slow one**,
+which is the core of the
+[FLP impossibility result](https://en.wikipedia.org/wiki/Consensus_%28computer_science%29#The_FLP_impossibility_result_for_asynchronous_deterministic_consensus).
+Any design in which one machine must decide that a process on *another* machine
+is dead leads to this problem.
 
-## The assumptions that make the problem disappear
+The design presented here avoids it by **not coordinating at all**.
 
-Two facts about *my* pipeline:
+## Assumptions that remove the problem
 
-1. **The same job always runs on the same host.**
-2. **A host can tell, for certain, whether one of its own processes is dead**:
-   compare boot id, pid, and process start time.
+Two properties of this pipeline make coordination unnecessary:
 
-So a lock left by a crashed run of *my* job was created on *my* host, and I
-can check it exactly: recover. A lock owned by *another* host is not mine to
-judge: wait. Its own host will recover it.
+1. **Host affinity:** a given job always runs on the same host.
+2. **Exact local failure detection:** a host can determine with certainty
+   whether one of its own processes is dead, by comparing boot id, pid, and
+   process start time.
 
-The impossible question, "is that remote process dead?", is never asked. No
-timeouts, no heartbeats, no clocks, no leader. The only shared state is the lock
-on NFS, whose metadata records the owner's machine (`/etc/machine-id`), boot id,
-pid, and start time.
+Consequently, a lock left by a crashed run of a job was created on the host
+where the job runs, and that host can verify the holder's death exactly and
+recover the lock. A lock owned by another host is never judged remotely; the
+process waits, and the owning host recovers the lock.
 
-## Checking it with Caelum
+The question "is that remote process dead?" is never asked, so no coordination
+is required. The only shared state is the lock on NFS, whose metadata records
+the owner's machine (`/etc/machine-id`), boot id, pid, and start time.
 
-[Caelum](https://github.com/dhilst/caelum) is a model checker I built: you
-describe states, transitions, and properties, and it checks every reachable
-state and every interleaving.
+## Formalization in Caelum
+
+[Caelum](https://github.com/dhilst/caelum) is an LTL model checker: a
+specification describes states, transitions, and properties, and Caelum checks
+the properties against every reachable state and every interleaving.
 
 The model has two hosts and three processes: `local` runs two (so they can race
-to recover a crashed lock), `remote` runs one. Where each process runs is a
+to recover a crashed lock) and `remote` runs one. The host of each process is a
 static fact:
 
 ```
@@ -87,18 +91,19 @@ init {
 }
 ```
 
-A quick note on reading transitions. A transition is one step of the system,
-written as a condition over two states: the state *before* the step and the
-state *after* it. A plain name like `st[p]` is the value **before** the step;
-the same name with a prime, `st[p]'`, is the value **after** it. So
-`st[p] = waiting ∧ st[p]' = holding` reads "p was waiting, and now it's
-holding". Lines that mention only unprimed names are the *guard* (when the step
-may happen); lines with primes are the *effect* (what the step changes).
-`∧` is "and", `∨` is "or". `unchanged(x, y)` is shorthand for
-`x' = x ∧ y' = y`: a variable the step doesn't mention could take *any* value
-after it, so we pin down everything the step shouldn't touch.
+**Notation.** A transition is one step of the system, written as a predicate
+over two states: the state *before* the step and the state *after* it. An
+unprimed name such as `st[p]` denotes the value **before** the step; the primed
+name `st[p]'` denotes the value **after** it. For example,
+`st[p] = waiting ∧ st[p]' = holding` means "p was waiting and is now holding".
+Conjuncts over unprimed names form the *guard* (when the step is enabled);
+conjuncts over primed names form the *effect* (what the step changes). `∧` is
+conjunction and `∨` is disjunction. `unchanged(x, y)` abbreviates
+`x' = x ∧ y' = y`; a variable not constrained by a transition may take any
+value in the next state, so every variable the step must preserve is listed
+explicitly.
 
-The whole protocol is one guard:
+The protocol is captured by the guard of `acquire`:
 
 ```
 transition acquire(p ∈ Proc) {
@@ -119,8 +124,9 @@ transition acquire(p ∈ Proc) {
 }
 ```
 
-*Take the lock if nobody has it, or if it's stale and it belongs to the host I
-run on.* A holder leaves in one of two ways. Normally it releases the lock:
+That is: a process may take the lock if it is free, or if it is stale and
+owned by the process's own host. A holder leaves the critical section in one of
+two ways. Normally it releases the lock:
 
 ```
 transition release(p ∈ Proc) {
@@ -135,7 +141,7 @@ transition release(p ∈ Proc) {
 }
 ```
 
-Or it crashes, and that's what leaves a lock behind:
+Alternatively it crashes, leaving a stale lock behind:
 
 ```
 transition crash(p ∈ Proc) {
@@ -150,17 +156,17 @@ transition crash(p ∈ Proc) {
 }
 ```
 
-And what we demand. Properties talk about whole runs of the system, over time,
-using two temporal operators:
+The required properties talk about whole runs of the system, over time, using
+two temporal operators:
 
 - `□ φ`, **always**: φ holds in every state, from now on. `□ (x ≠ 2)` means
   "x is never 2".
 - `◇ φ`, **eventually**: φ holds in some state, now or later. `◇ (x = 2)` means
   "x will be 2 at some point".
 
-Combined, `□ (a → ◇ b)` reads "whenever a happens, b follows eventually": the
-shape of every "no deadlock" promise. `∀ p ∈ Proc:` is "for every process p", and
-`→` is "implies".
+Combined, `□ (a → ◇ b)` reads "whenever a holds, b eventually holds", the
+general form of a liveness requirement. `∀ p ∈ Proc:` means "for every process
+p", and `→` is implication.
 
 
 ```
@@ -189,61 +195,28 @@ property work_progresses {
 }
 ```
 
-All pass: **44 states, checked in about a second, in your browser.**
+All properties hold: **44 states, checked in about a second in the browser.**
 
-The green checkmarks are nice, but the real value was being forced to write the
-assumptions down: the owner's host is the only judge (A0), taking the lock is
-atomic (A1), processes finish (A2) and eventually succeed (A3), and a crashed
-process comes back (A4). If A4 fails, the lock stays stuck until a human removes
-it. That's the price of not coordinating, and I'm fine with it.
+Writing the model required stating every assumption explicitly: only the
+owner's host decides whether the holder is dead (A0), acquiring the lock is
+atomic (A1), processes terminate (A2) and eventually acquire the lock (A3), and
+a crashed process is restarted (A4). If A4 does not hold, the lock remains
+until an operator removes it; this is the cost of not coordinating.
 
-## No flock for you
+## Result: a simpler implementation
 
-The scratch space is a **re-exported** NFS mount, and the kernel refuses file
-locks there ([kernel docs](https://docs.kernel.org/filesystems/nfs/reexport.html)):
-`flock`/`fcntl` return `EOPNOTSUPP`. No problem: the model never said "use
-flock", it said "taking the lock is atomic". NFSv4's `mkdir` (fails if the
-directory exists) and `rename` (atomic) give us that. The spec didn't change.
+None of the distributed machinery from step 4 is needed. The algorithm is:
+take the lock atomically; if it is stale and owned by the local host, recover
+it; otherwise wait.
 
-## The payoff: the code got smaller
-
-No heartbeat thread, no lease timeouts, no clock skew handling, no fencing
-tokens, no leader election. Just: try to take the lock atomically; if it's
-stale *and mine to judge*, recover it; otherwise wait.
-
-This is what lightweight formal verification is actually good for. Not
-(only) for proving that complicated code is correct, but for discovering that
-you **don't need the complicated code**. Once you write down which assumptions
-really hold (same host, exact local death check, atomic create), the
-design collapses from "distributed systems problem" to "careful file handling".
-And the model checker tells you that the collapse is sound, instead of your gut.
+This illustrates a central use of lightweight formal verification: not only
+proving that complex code is correct, but showing that **the complex code is
+unnecessary**. Once the assumptions that actually hold are written down (host
+affinity, exact local failure detection, atomic creation), the design reduces
+from a distributed-systems problem to careful file handling, and the model
+checker confirms that the reduction is sound.
 
 _In short: Small design + strong guarantees. In this case I could fit the implementation in ~200 lines that I know are deadlock and data-corruption free. And this is a solved problem now, I can implement it in any language I want._
-
-## Plot twist: the obviously true assumption
-
-There's one more assumption hiding in the model: **hosts have distinct
-identities.** In the spec, `local ≠ remote` by construction. In production,
-"host identity" means `/etc/machine-id`, and it is *obviously* unique per
-machine. That's what it's for.
-
-Except when it isn't. `/etc/machine-id` is generated once, on a machine's first
-boot, and then it's just a file on disk. **Clone a VM, or create VMs from a
-template or golden image, and every copy inherits the same machine-id**, unless
-the image was prepared for it (the file emptied so each clone generates its
-own on first boot). Cloud images usually get this right. The template someone
-made by hand three years ago may not.
-
-And if two hosts share a machine-id, everything above falls apart. Host A sees a
-lock held by host B, reads "same machine-id, different boot id", and concludes
-"that's mine, from before a reboot, so it's dead". It isn't. B is alive and
-writing. A takes the lock, and now two jobs write the same directory: silent
-data corruption, in our beautiful, model-checked, 44-state perfect system. The
-proof is still correct. It's just about a world where machine-ids are unique,
-and we don't live there by default.
-
-So the machine-id uniqueness is now an explicit assumption (A5), and checking it
-on every host is part of deploying the pipeline.
 
 ## Lessons learned
 
@@ -255,5 +228,5 @@ assumptions. And once you enumerate them, you can find out, with a simple
 Google search or a question to an LLM, whether they hold in your production
 environment. For example, that `/etc/machine-id` may **not** be unique.
 
-The full spec, with the explanation and a Check button:
+The full specification, with explanations and a Check button:
 **[NFS Shared Lock — Caelum real-world examples](https://dhilst.github.io/caelum/real-world/nfs-shared-lock.html)**.
