@@ -91,12 +91,18 @@ The whole protocol is one guard:
 
 ```
 transition acquire(p ∈ Proc) {
-  st[p] = waiting ∧                                   // p is waiting,
-  (rec = none ∨ (rec = stale ∧ owner = host[p])) ∧    // the lock is free, or stale and owned by p's host:
-  st[p]' = holding ∧                                  // p now holds it,
-  rec' = live ∧                                       // the lock is live
-  owner' = host[p] ∧                                  // and records p's host;
-  unchanged(st except p, host)                        // everyone else is untouched
+  // p is waiting,
+  st[p] = waiting ∧
+  // the lock is free, or stale and owned by p's host:
+  (rec = none ∨ (rec = stale ∧ owner = host[p])) ∧
+  // p now holds it,
+  st[p]' = holding ∧
+  // the lock is live
+  rec' = live ∧
+  // and records p's host;
+  owner' = host[p] ∧
+  // everyone else is untouched
+  unchanged(st except p, host)
 }
 ```
 
@@ -105,10 +111,14 @@ run on.* A holder leaves in one of two ways. Normally it releases the lock:
 
 ```
 transition release(p ∈ Proc) {
-  st[p] = holding ∧                    // p holds the lock,
-  st[p]' = free ∧                      // finishes its work and exits,
-  rec' = none ∧                        // removing the lock;
-  unchanged(st except p, owner, host)  // nothing else changes
+  // p holds the lock,
+  st[p] = holding ∧
+  // finishes its work and exits,
+  st[p]' = free ∧
+  // removing the lock;
+  rec' = none ∧
+  // nothing else changes
+  unchanged(st except p, owner, host)
 }
 ```
 
@@ -116,10 +126,14 @@ Or it crashes, and that's what leaves a lock behind:
 
 ```
 transition crash(p ∈ Proc) {
-  st[p] = holding ∧                    // p holds the lock,
-  st[p]' = free ∧                      // dies,
-  rec' = stale ∧                       // leaving the lock behind, stale,
-  unchanged(st except p, owner, host)  // still naming p's host
+  // p holds the lock,
+  st[p] = holding ∧
+  // dies,
+  st[p]' = free ∧
+  // leaving the lock behind, stale,
+  rec' = stale ∧
+  // still naming p's host
+  unchanged(st except p, owner, host)
 }
 ```
 
@@ -128,17 +142,23 @@ And what we demand:
 ```
 // No data corruption: at most one holder.
 property mutual_exclusion {
-  □ (∀ p ∈ Proc: ∀ q ∈ Proc: (p ≠ q ∧ st[p] = holding) → st[q] ≠ holding)
+  □ (∀ p ∈ Proc: ∀ q ∈ Proc:
+       (p ≠ q ∧ st[p] = holding) → st[q] ≠ holding)
 }
 
-// No deadlock: a crashed lock is eventually taken back by its host.
+// No deadlock: a crashed lock is
+// eventually taken back by its host.
 property crash_recoverable {
-  □ (∀ h ∈ Host: (rec = stale ∧ owner = h) → ◇ (rec = live ∧ owner = h))
+  □ (∀ h ∈ Host:
+       (rec = stale ∧ owner = h) →
+         ◇ (rec = live ∧ owner = h))
 }
 
-// Progress: every waiting process eventually gets the lock.
+// Progress: every waiting process
+// eventually gets the lock.
 property work_progresses {
-  □ (∀ p ∈ Proc: st[p] = waiting → ◇ (st[p] = holding))
+  □ (∀ p ∈ Proc:
+       st[p] = waiting → ◇ (st[p] = holding))
 }
 ```
 
