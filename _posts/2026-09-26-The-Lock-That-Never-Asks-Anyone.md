@@ -109,7 +109,7 @@ that process 0 runs on host `local`. Processes 0 and 1 share host `local`;
 process 2 runs on `remote`.
 
 The rest of the state is `st[p]`, the state of process `p` (`free`, `waiting`,
-or `holding`), and the lock on the shared filesystem: `rec` (`none`, `live`, or
+or `holding`), and the lock on the shared filesystem: `lock` (`unlocked`, `locked`, or
 `stale`) and `owner` (the host recorded in its metadata).
 
 **Notation.** A transition is one step of the system, written as a predicate
@@ -136,12 +136,12 @@ transition acquire(p ∈ Proc) {
   st[p] = waiting ∧
   // the lock is free, or stale
   // and owned by p's host:
-  (rec = none ∨
-    (rec = stale ∧ owner = host[p])) ∧
+  (lock = unlocked ∨
+    (lock = stale ∧ owner = host[p])) ∧
   // p now holds it,
   st[p]' = holding ∧
-  // the lock is live
-  rec' = live ∧
+  // the lock is taken
+  lock' = locked ∧
   // and records p's host;
   owner' = host[p] ∧
   // everyone else is untouched
@@ -160,7 +160,7 @@ transition release(p ∈ Proc) {
   // finishes its work and exits,
   st[p]' = free ∧
   // removing the lock;
-  rec' = none ∧
+  lock' = unlocked ∧
   // nothing else changes
   unchanged(st except p, owner, host)
 }
@@ -175,7 +175,7 @@ transition crash(p ∈ Proc) {
   // dies,
   st[p]' = free ∧
   // leaving the lock behind, stale,
-  rec' = stale ∧
+  lock' = stale ∧
   // still naming p's host
   unchanged(st except p, owner, host)
 }
@@ -207,8 +207,8 @@ property mutual_exclusion {
 // eventually taken back by its host.
 property crash_recoverable {
   □ (∀ h ∈ Host:
-       (rec = stale ∧ owner = h) →
-         ◇ (rec = live ∧ owner = h))
+       (lock = stale ∧ owner = h) →
+         ◇ (lock = locked ∧ owner = h))
 }
 
 // Progress: every waiting process
