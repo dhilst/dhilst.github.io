@@ -44,7 +44,7 @@ Two rules:
 
 Congratulations, you are implementing consensus. The wall is real: **a remote
 observer can't tell a crashed process from a slow one** (that's the heart of
-FLP). Any design where one machine must decide "that *other* machine's process
+[FLP](https://en.wikipedia.org/wiki/Consensus_%28computer_science%29#The_FLP_impossibility_result_for_asynchronous_deterministic_consensus)). Any design where one machine must decide "that *other* machine's process
 is dead" ends up here.
 
 So the trick isn't to coordinate better. It's to **not coordinate at all.**
@@ -147,7 +147,7 @@ All pass: **44 states, checked in about a second, in your browser.**
 The green checkmarks are nice, but the real value was being forced to write the
 assumptions down: the owner's host is the only judge (A0), taking the lock is
 atomic (A1), processes finish (A2) and eventually succeed (A3), and a crashed
-host comes back (A4). If A4 fails, the lock stays stuck until a human removes
+process comes back (A4). If A4 fails, the lock stays stuck until a human removes
 it. That's the price of not coordinating, and I'm fine with it.
 
 ## No flock for you
