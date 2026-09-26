@@ -4,8 +4,6 @@ date: 2026-09-26
 categories: [formal-verification, model-checking, caelum, distributed-systems, nfs]
 ---
 
-(AI Generated)
-
 This is the story of a lock. A boring lock. A lock so boring it doesn't talk to
 anybody, doesn't elect a leader, doesn't heartbeat, doesn't read the clock, and
 still can't corrupt your data or get stuck. Getting to "boring" took a model
