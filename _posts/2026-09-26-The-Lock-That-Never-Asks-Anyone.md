@@ -101,7 +101,18 @@ transition acquire(p ∈ Proc) {
 ```
 
 *Take the lock if nobody has it, or if it's stale and it belongs to the host I
-run on.* And a crash is what leaves a lock behind:
+run on.* A holder leaves in one of two ways. Normally it releases the lock:
+
+```
+transition release(p ∈ Proc) {
+  st[p] = holding ∧                    // p holds the lock,
+  st[p]' = free ∧                      // finishes its work and exits,
+  rec' = none ∧                        // removing the lock;
+  unchanged(st except p, owner, host)  // nothing else changes
+}
+```
+
+Or it crashes, and that's what leaves a lock behind:
 
 ```
 transition crash(p ∈ Proc) {
