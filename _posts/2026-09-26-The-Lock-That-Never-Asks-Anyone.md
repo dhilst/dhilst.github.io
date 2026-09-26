@@ -251,6 +251,8 @@ really hold (same host, exact local death check, atomic create), the
 design collapses from "distributed systems problem" to "careful file handling".
 And the model checker tells you that the collapse is sound, instead of your gut.
 
+_In short: Small design + strong garantees. In this case I could fit the implementation in ~200 lines that I know are deadlock and data-corruption free. And this is a solved problem now, I can implement it in any language I want._
+
 Formal methods have a reputation for making things heavier. Here it made the
 code lighter. Forty-four states, one guard, zero consensus.
 
