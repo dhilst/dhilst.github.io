@@ -68,7 +68,20 @@ process waits, and the owning host recovers the lock.
 
 The question "is that remote process dead?" is never asked, so no coordination
 is required. The only shared state is the lock on NFS, whose metadata records
-the owner's machine (`/etc/machine-id`), boot id, pid, and start time.
+the owner's machine-id, boot id, pid, and start time.
+
+Let P, M, B, and T be the pid, machine-id, boot id, and start time recorded in
+the lock. The lock is **stale** if and only if:
+
+```
+M = current machine-id ∧
+( no process has pid P ∨
+  T ≠ start time of P ∨
+  B ≠ current boot id )
+```
+
+If M ≠ current machine-id, the lock was acquired by a remote host, so the
+process waits or times out.
 
 ## Formalization in Caelum
 
@@ -91,6 +104,14 @@ init {
 }
 ```
 
+`host[p]` denotes the host where process `p` runs: `host[0] = local` states
+that process 0 runs on host `local`. Processes 0 and 1 share host `local`;
+process 2 runs on `remote`.
+
+The rest of the state is `st[p]`, the state of process `p` (`free`, `waiting`,
+or `holding`), and the lock on the shared filesystem: `rec` (`none`, `live`, or
+`stale`) and `owner` (the host recorded in its metadata).
+
 **Notation.** A transition is one step of the system, written as a predicate
 over two states: the state *before* the step and the state *after* it. An
 unprimed name such as `st[p]` denotes the value **before** the step; the primed
@@ -98,10 +119,14 @@ name `st[p]'` denotes the value **after** it. For example,
 `st[p] = waiting ∧ st[p]' = holding` means "p was waiting and is now holding".
 Conjuncts over unprimed names form the *guard* (when the step is enabled);
 conjuncts over primed names form the *effect* (what the step changes). `∧` is
-conjunction and `∨` is disjunction. `unchanged(x, y)` abbreviates
-`x' = x ∧ y' = y`; a variable not constrained by a transition may take any
-value in the next state, so every variable the step must preserve is listed
-explicitly.
+conjunction and `∨` is disjunction.
+
+`unchanged(...)` lists the variables that the transition does not modify:
+`unchanged(x, y)` abbreviates `x' = x ∧ y' = y`. A variable not constrained by
+a transition may take any value in the next state, so every variable the step
+must preserve is listed explicitly. `except` excludes one index of an indexed
+variable: `unchanged(st except p)` states that the state of every process is
+unchanged except that of `p`, the process performing the step.
 
 The protocol is captured by the guard of `acquire`:
 
