@@ -189,9 +189,9 @@ two temporal operators:
 - `◇ φ`, **eventually**: φ holds in some state, now or later. `◇ (x = 2)` means
   "x will be 2 at some point".
 
-Combined, `□ (a → ◇ b)` reads "whenever a holds, b eventually holds", the
-general form of a liveness requirement. `∀ p ∈ Proc:` means "for every process
-p", and `→` is implication.
+Combined, `□ ◇ φ` reads "φ holds infinitely often": whatever happens, φ comes
+back. The liveness properties below use this form. `∀ p ∈ Proc:` means "for
+every process p", and `→` is implication.
 
 
 ```
@@ -203,12 +203,10 @@ property mutual_exclusion {
          st[q] ≠ holding)
 }
 
-// No deadlock: a crashed lock is
-// eventually taken back by its host.
+// No deadlock: the lock is never
+// stale forever.
 property crash_recoverable {
-  □ (∀ h ∈ Host:
-       (lock = stale ∧ owner = h) →
-         ◇ (lock = locked ∧ owner = h))
+  □ ◇ (lock ≠ stale)
 }
 
 // Progress: the lock keeps being
@@ -218,7 +216,14 @@ property work_progresses {
 }
 ```
 
-All properties hold: **44 states, checked in about a second in the browser.**
+In the browser, Caelum checks these with bounded model checking and
+k-induction (using a SAT solver). The safety properties are **proved** for
+every reachable state; the liveness properties have no violating loop within 20
+steps. Running `caelum check --engine explicit` enumerates all 44 reachable
+states and proves every property, liveness included.
+
+Only the crash host can recover a stale lock (the guard of `acquire`), so
+`crash_recoverable` means the crash host eventually takes the lock back.
 
 Per-process progress, `□ (∀ p: waiting(p) → ◇ holding(p))`, does **not**
 hold. A process that keeps crashing on one host and recovering its own stale
