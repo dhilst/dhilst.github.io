@@ -91,17 +91,26 @@ The whole protocol is one guard:
 
 ```
 transition acquire(p ∈ Proc) {
-  st[p] = waiting ∧
-  (rec = none ∨ (rec = stale ∧ owner = host[p])) ∧
-  st[p]' = holding ∧
-  rec' = live ∧
-  owner' = host[p] ∧
-  unchanged(st except p, host)
+  st[p] = waiting ∧                                   // p is waiting,
+  (rec = none ∨ (rec = stale ∧ owner = host[p])) ∧    // the lock is free, or stale and owned by p's host:
+  st[p]' = holding ∧                                  // p now holds it,
+  rec' = live ∧                                       // the lock is live
+  owner' = host[p] ∧                                  // and records p's host;
+  unchanged(st except p, host)                        // everyone else is untouched
 }
 ```
 
 *Take the lock if nobody has it, or if it's stale and it belongs to the host I
-run on.* A `crash` transition leaves the lock behind as `stale`.
+run on.* And a crash is what leaves a lock behind:
+
+```
+transition crash(p ∈ Proc) {
+  st[p] = holding ∧                    // p holds the lock,
+  st[p]' = free ∧                      // dies,
+  rec' = stale ∧                       // leaving the lock behind, stale,
+  unchanged(st except p, owner, host)  // still naming p's host
+}
+```
 
 And what we demand:
 
