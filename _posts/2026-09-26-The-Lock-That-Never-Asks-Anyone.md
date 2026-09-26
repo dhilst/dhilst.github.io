@@ -106,9 +106,22 @@ counterexample trace.
 
 The model is tiny on purpose:
 
-- **2 hosts, 3 process slots.** Host 0 has two slots, so two runs on the same
-  host can race to recover a crashed lock. Host 1 has one slot and plays "the
-  other host".
+- **2 hosts, 3 process slots.** Host `local` has two slots, so two runs on the
+  same host can race to recover a crashed lock. Host `remote` has one slot and
+  plays "the other host". Where each process runs is a static fact:
+
+```
+type Host = enum { local, remote }
+let host[p ∈ Proc] ∈ Host   // static fact, fixed in init; every transition keeps it unchanged
+
+// Static facts: where each process runs (never changes).
+init {
+  host[0] = local ∧
+  host[1] = local ∧
+  host[2] = remote
+}
+```
+
 - Each process is `free`, `waiting`, or `holding`.
 - The lock record is `none`, `live`, or `stale` (the holder crashed), plus the
   `owner` host written in the record.
@@ -120,17 +133,17 @@ The heart of the protocol is a single guard:
 // stale one — only on the owner's host (A0).
 transition acquire(p ∈ Proc) {
   st[p] = waiting ∧
-  (rec = none ∨ (rec = stale ∧ owner = p / 2)) ∧
+  (rec = none ∨ (rec = stale ∧ owner = host[p])) ∧
   st[p]' = holding ∧
   rec' = live ∧
-  owner' = p / 2 ∧
-  unchanged(st except p)
+  owner' = host[p] ∧
+  unchanged(st except p, host)
 }
 ```
 
 Read the guard out loud: *you may take the lock if nobody has it, or if it's
-stale and it's yours to judge.* `owner = p / 2` is the whole "never ask a
-remote host" idea, in thirteen characters.
+stale and it's yours to judge.* `owner = host[p]`, "the lock belongs to the
+host I run at", is the whole "never ask a remote host" idea.
 
 A crash is one transition:
 
@@ -140,7 +153,7 @@ transition crash(p ∈ Proc) {
   st[p] = holding ∧
   st[p]' = free ∧
   rec' = stale ∧
-  unchanged(st except p, owner)
+  unchanged(st except p, owner, host)
 }
 ```
 
@@ -168,7 +181,7 @@ Safety ("nothing bad happens"): no two holders, ever, across all hosts. Liveness
 ("something good eventually happens"): a crash never wedges the pipeline, and
 nobody waits forever.
 
-All of it passes. **44 states, checked in about 150 ms, in your browser.** Go
+All of it passes. **44 states, checked in about a second, in your browser.** Go
 press the button: [the live spec](https://dhilst.github.io/caelum/real-world/nfs-shared-lock.html).
 
 ## The part where the model checker earns its keep
@@ -200,8 +213,8 @@ tell live from stale, the guess is sometimes wrong. Caelum found the bug in
 four steps:
 
 ```
-pid 0 (host 0) acquires the lock
-pid 2 (host 1) decides pid 0 "looks dead" and takes over   ← pid 0 is alive
+pid 0 (local) acquires the lock
+pid 2 (remote) decides pid 0 "looks dead" and takes over   ← pid 0 is alive
 → both hold the lock: silent data corruption
 ```
 
